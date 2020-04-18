@@ -30,5 +30,10 @@ Deck::Deck() {
   }
 }
 
+Card Deck::Draw() {
+  Card to_return_ = deck_of_cards_.top();
+  deck_of_cards_.pop();
+  return to_return_;
+}
 
 }
