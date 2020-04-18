@@ -8,7 +8,8 @@
 namespace likha {
 
 Card::Card(Card::Suit set_suit, Card::Rank set_rank) {
-
+  suit = set_suit;
+  rank = set_rank;
 }
 
 size_t Card::GetPointValue() {
@@ -17,11 +18,11 @@ size_t Card::GetPointValue() {
   }
 
   if (suit == Suit::Diamonds && rank == Rank::Ten) {
-    return kTenDiamonds;
+    return kTenDiamondsValue;
   }
 
   if (suit == Suit::Spades && rank == Rank::Queen) {
-    return kQueenSpades;
+    return kQueenSpadesValue;
   }
 
   return kNoValue;

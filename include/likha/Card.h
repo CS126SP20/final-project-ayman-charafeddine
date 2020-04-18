@@ -9,14 +9,6 @@
 namespace likha {
 
 class Card {
- private:
-  constexpr size_t kHeartsValue = 1;
-  constexpr size_t kTenDiamonds = 10;
-  constexpr size_t kQueenSpades = 13;
-  constexpr size_t kNoValue = 0;
-
-  Suit suit;
-  Rank rank;
 
  public:
   enum class Suit {
@@ -48,6 +40,15 @@ class Card {
   Rank GetRank() const;
 
   bool operator==(const Card& rhs) const;
+
+ private:
+  static constexpr size_t kHeartsValue = 1;
+  static constexpr size_t kTenDiamondsValue = 10;
+  static constexpr size_t kQueenSpadesValue = 13;
+  static constexpr size_t kNoValue = 0;
+
+  Suit suit;
+  Rank rank;
 
 };
 
