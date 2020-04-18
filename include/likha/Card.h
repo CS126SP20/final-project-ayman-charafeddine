@@ -44,8 +44,10 @@ class Card {
 
   Card(Suit set_suit, Rank set_rank);
   size_t GetPointValue();
-  Suit GetSuit();
-  Rank GetRank();
+  Suit GetSuit() const;
+  Rank GetRank() const;
+
+  bool operator==(const Card& rhs) const;
 
 };
 

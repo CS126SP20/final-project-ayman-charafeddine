@@ -27,11 +27,15 @@ size_t Card::GetPointValue() {
   return kNoValue;
 }
 
-Card::Suit Card::GetSuit() {
+Card::Suit Card::GetSuit() const {
   return suit;
 }
-Card::Rank Card::GetRank() {
+
+Card::Rank Card::GetRank() const {
   return rank;
+}
+bool Card::operator==(const Card& rhs) const {
+  return rhs.GetRank() == rank && rhs.GetSuit() == suit;
 }
 
 } //namespace likha
