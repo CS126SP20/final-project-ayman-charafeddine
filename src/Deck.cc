@@ -15,8 +15,8 @@ namespace likha {
 Deck::Deck() {
   std::vector<Card> tmp_cards_vector_;
 
-  for (Suit suit = Suit::Diamonds; suit <= Suit::Spades; ((int&) suit)++) {
-    for (Rank rank = Rank::Ace; rank <= Rank::King; ((int&) rank)++) {
+  for (Suit suit = Suit::Diamonds; suit <= Suit::Clubs; ((int&) suit)++) {
+    for (Rank rank = Rank::Two; rank <= Rank::Ace; ((int&) rank)++) {
       tmp_cards_vector_.emplace_back(suit, rank);
     }
   }
@@ -34,6 +34,10 @@ Card Deck::Draw() {
   Card to_return_ = deck_of_cards_.top();
   deck_of_cards_.pop();
   return to_return_;
+}
+
+size_t Deck::size() const{
+  return deck_of_cards_.size();
 }
 
 }

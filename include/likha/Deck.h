@@ -19,6 +19,7 @@ class Deck {
  public:
   Deck();
   Card Draw();
+  size_t size() const;
 
 };
 
