@@ -16,8 +16,8 @@ Deck::Deck() {
   std::vector<Card> tmp_cards_vector_;
 
   for (Suit suit = Suit::Diamonds; suit <= Suit::Spades; ((int&) suit)++) {
-    for (Rank rank = Rank::One; rank <= Rank::King; ((int&) rank)++) {
-      tmp_cards_vector_.push_back(Card(suit, rank));
+    for (Rank rank = Rank::Ace; rank <= Rank::King; ((int&) rank)++) {
+      tmp_cards_vector_.emplace_back(suit, rank);
     }
   }
 
