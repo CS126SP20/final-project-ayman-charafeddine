@@ -4,9 +4,13 @@
 #define FINALPROJECT_APPS_MYAPP_H_
 
 #include <cinder/app/App.h>
-
+#include <cinder/gl/Texture.h>
 
 namespace myapp {
+
+enum class GameState{
+
+};
 
 class MyApp : public cinder::app::App {
  public:
@@ -15,6 +19,8 @@ class MyApp : public cinder::app::App {
   void update() override;
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
+ private:
+  cinder::gl::TextureRef card_texture_;
 };
 
 }  // namespace myapp
