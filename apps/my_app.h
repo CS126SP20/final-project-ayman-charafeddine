@@ -8,8 +8,11 @@
 
 namespace myapp {
 
-enum class GameState{
-
+enum class PlayerPosition {
+  top,
+  right,
+  bottom,
+  left
 };
 
 class MyApp : public cinder::app::App {
@@ -20,7 +23,11 @@ class MyApp : public cinder::app::App {
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
  private:
+  void DrawDealing();
   cinder::gl::TextureRef card_texture_;
+  bool gl_is_rotated_;
+  float card_pos_change_;
+  size_t cards_dealt_;
 };
 
 }  // namespace myapp

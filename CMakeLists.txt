@@ -87,12 +87,3 @@ if(NOT catch2_POPULATED)
 endif()
 
 # Add more CMake libraries here ...
-
-# includes cmake/FindSDL2.cmake
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "../cmake/FindSDL2.cmake")
-
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
-
-add_executable(FinalProject apps/my_app.cc)
-target_link_libraries(FinalProject ${SDL2_LIBRARIES})

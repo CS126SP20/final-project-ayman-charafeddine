@@ -20,7 +20,8 @@ class Card {
     Diamonds,
     Hearts,
     Spades,
-    Clubs
+    Clubs,
+    kNumSuits
   };
 
   enum class Rank {
