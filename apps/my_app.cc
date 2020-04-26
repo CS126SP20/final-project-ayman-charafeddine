@@ -9,7 +9,7 @@
 #include <cinder/gl/draw.h>
 #include <cinder/gl/gl.h>
 
-#include "CinderImGui.h"
+#include <cinder/CinderImGui.h>
 
 
 
@@ -27,7 +27,7 @@ MyApp::MyApp() {
 void MyApp::setup() {
   cinder::gl::enableDepthWrite();
   cinder::gl::enableDepthRead();
-  ImGui::initialize();
+  ImGui::Initialize();
 }
 
 void MyApp::update() {
