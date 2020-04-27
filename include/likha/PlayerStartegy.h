@@ -18,7 +18,7 @@ using namespace likha;
 
 class PlayerStrategy {
  public:
-  virtual string chooseName() = 0;
+  virtual string chooseName() = 0 const;
   virtual void receiveNames(string teammateName, vector<string> opponentNames) = 0;
   virtual void receiveInitialCards(vector<Card> cards) = 0;
   virtual vector<Card> giftCards() = 0;
