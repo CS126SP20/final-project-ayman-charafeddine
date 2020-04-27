@@ -2,10 +2,11 @@
 // Created by ayman on 4/18/20.
 //
 
-#ifndef FINALPROJECT_SRC_CARD_H_
-#define FINALPROJECT_SRC_CARD_H_
+#ifndef FINALPROJECT_INCLUDE_LIKHA_CARD_H_
+#define FINALPROJECT_INCLUDE_LIKHA_CARD_H_
 
 #include <glob.h>
+
 namespace likha {
 
 static constexpr size_t kHeartsValue = 1;
@@ -37,7 +38,8 @@ class Card {
     Jack,
     Queen,
     King,
-    Ace
+    Ace,
+    kNumRanks
   };
 
   Card(Suit set_suit, Rank set_rank);
