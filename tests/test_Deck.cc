@@ -27,3 +27,5 @@ TEST_CASE("Test Draw() function") {
     REQUIRE(deck.size() == kDeckSize - 1);
   }
 }
+
+//TODO test deck constructor creates full deck with each card showing up once
