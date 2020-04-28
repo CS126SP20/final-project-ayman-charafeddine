@@ -25,17 +25,23 @@ class GameEngine {
     string name_;
     size_t score_;
     size_t team_;
+    bool operator ==(const Player& rhs) const {return name_ == rhs.name_;}
   };
+
+  void CommunicateNames();
+  void DealCards();
 
  public:
   /**
    *
    * @param playerStrategies_ vector of PlayerStrategies. Any PlayerStrategy after the 4th will be ignored.
    */
-  GameEngine(vector<PlayerStrategy*> playerStrategies_);
+  explicit GameEngine(vector<PlayerStrategy*> playerStrategies_);
 
   ~GameEngine();
-  vector<Player> players;
+  vector<Player> players_;
+
+  void RunGame();
 };
 
 }
