@@ -32,7 +32,7 @@ void BasicPlayerStrategy::receiveMoveValidation(string) {
 void BasicPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {
 
 }
-void BasicPlayerStrategy::receiveGift() {
+void BasicPlayerStrategy::receiveGift(vector<Card> cards) {
 
 }
 

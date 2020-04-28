@@ -59,10 +59,12 @@ void GameEngine::DealCards(Deck deck_) {
     player_.strategy_ptr_->receiveInitialCards(cards_to_deal_);
   }
 }
-//void GameEngine::GiftCards() {
-//  for (const auto& player : players_) {
-//    player.strategy_ptr_.
-//  }
-//}
+
+void GameEngine::GiftCards() {
+  for (size_t i = 0; i < kNumPlayers; i++) {
+    players_[(i + 1) % kNumPlayers].strategy_ptr_->receiveGift( //player to the right receives the gift
+        players_[i].strategy_ptr_->giftCards());
+  }
+}
 
 }
