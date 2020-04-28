@@ -14,7 +14,7 @@ string BasicPlayerStrategy::chooseName() const {
   string name = "player" + std::to_string(std::random_device().operator()());
   return name;
 }
-void BasicPlayerStrategy::receiveNames(string teammateName, vector<string> opponentNames) {
+void BasicPlayerStrategy::receiveNames(string teammate_name_, vector<string> opponent_names_) {
 
 }
 void BasicPlayerStrategy::receiveInitialCards(vector<Card> cards) {

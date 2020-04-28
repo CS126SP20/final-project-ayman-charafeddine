@@ -49,5 +49,14 @@ void GameEngine::CommunicateNames() {
     current_player_.strategy_ptr_->receiveNames(teammate_name_, opponent_names_);
   }
 }
+void GameEngine::DealCards(Deck deck_) {
+  for (const auto& player_ : players_) {
+    vector<Card> cards_to_deal_;
+    for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
+      cards_to_deal_.push_back(deck_.Draw());
+    }
+    player_.strategy_ptr_->receiveInitialCards(cards_to_deal_);
+  }
+}
 
 }

@@ -11,6 +11,7 @@
 namespace likha {
 
 static constexpr size_t kDeckSize = 52;
+static constexpr size_t kNumCardsPerPlayer = 13;
 
 class Deck {
  private:

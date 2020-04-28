@@ -12,7 +12,7 @@ namespace likha {
 class BasicPlayerStrategy : public PlayerStrategy {
  public:
   string chooseName() const override;
-  void receiveNames(string teammateName, vector<string> opponentNames) override;
+  void receiveNames(string teammate_name_, vector<string> opponent_names_) override;
   void receiveInitialCards(vector<Card> cards) override;
   vector<Card> giftCards() override;
   Card playCard(vector<Card> cardsPlayed) override;
@@ -20,6 +20,8 @@ class BasicPlayerStrategy : public PlayerStrategy {
   void receiveCurrentScores(map<string, size_t> currentScores) override;
   ~BasicPlayerStrategy() override = default;
 };
+
+//TODO fix naming to fit google style
 
 }
 

@@ -29,7 +29,7 @@ class GameEngine {
   };
 
   void CommunicateNames();
-  void DealCards();
+  void DealCards(Deck deck_);
 
  public:
   /**
