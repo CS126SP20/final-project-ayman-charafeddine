@@ -14,7 +14,7 @@ GameEngine::GameEngine(vector<PlayerStrategy*> playerStrategies_) {
          strategy, // strategy_ptr_
         playerStrategies_[i]->chooseName(), // name_
         0, // score_
-        (size_t) floor(((double) i) / 2.0) // team_; Will give 0 for the first two players_ and 1 for the two remaining ones.
+        i % 2 // team_; Will give 0 for the first and third player, 1 for the second and fourth
     };
     players_.push_back(player);
   }
@@ -49,6 +49,7 @@ void GameEngine::CommunicateNames() {
     current_player_.strategy_ptr_->receiveNames(teammate_name_, opponent_names_);
   }
 }
+
 void GameEngine::DealCards(Deck deck_) {
   for (const auto& player_ : players_) {
     vector<Card> cards_to_deal_;
@@ -58,5 +59,10 @@ void GameEngine::DealCards(Deck deck_) {
     player_.strategy_ptr_->receiveInitialCards(cards_to_deal_);
   }
 }
+//void GameEngine::GiftCards() {
+//  for (const auto& player : players_) {
+//    player.strategy_ptr_.
+//  }
+//}
 
 }

@@ -20,10 +20,10 @@ TEST_CASE("test constructor") {
       REQUIRE(game_engine_.players_[0].team_ == 0);
     }
     SECTION("player 1") {
-      REQUIRE(game_engine_.players_[1].team_ == 0);
+      REQUIRE(game_engine_.players_[1].team_ == 1);
     }
     SECTION("player 2") {
-      REQUIRE(game_engine_.players_[2].team_ == 1);
+      REQUIRE(game_engine_.players_[2].team_ == 0);
     }
     SECTION("player 3") {
       REQUIRE(game_engine_.players_[3].team_ == 1);

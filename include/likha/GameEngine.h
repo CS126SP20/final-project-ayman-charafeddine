@@ -30,6 +30,7 @@ class GameEngine {
 
   void CommunicateNames();
   void DealCards(Deck deck_);
+  void GiftCards();
 
  public:
   /**

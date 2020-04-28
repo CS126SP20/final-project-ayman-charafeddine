@@ -23,6 +23,7 @@ class PlayerStrategy {
   virtual void receiveNames(string teammate_name_, vector<string> opponentNames) = 0;
   virtual void receiveInitialCards(vector<Card> cards) = 0;
   virtual vector<Card> giftCards() = 0;
+  virtual void receiveGift() = 0;
   virtual Card playCard(vector<Card> cardsPlayed) = 0;
   virtual void receiveMoveValidation(string) = 0;
   virtual void receiveCurrentScores(map<string, size_t> currentScores) = 0;
