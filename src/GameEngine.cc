@@ -8,7 +8,7 @@
 namespace likha {
 
 GameEngine::GameEngine(vector<PlayerStrategy*> playerStrategies_) {
-  for (size_t i = 0; i < kNumPlayers; i++) {
+  for (size_t i = 0; i < (size_t) PlayerPosition::kNumPlayers; i++) {
     PlayerStrategy* strategy = playerStrategies_[i];
     Player player = {
          strategy, // strategy_ptr_
