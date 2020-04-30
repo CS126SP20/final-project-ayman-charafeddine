@@ -16,7 +16,13 @@ using std::string;
 
 namespace likha {
 
-static constexpr size_t kNumPlayers = 4;
+enum class PlayerPosition {
+  top,
+  right,
+  bottom,
+  left,
+  kNumPlayers
+};
 
 class GameEngine {
  private:

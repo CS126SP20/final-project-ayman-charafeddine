@@ -61,9 +61,9 @@ void GameEngine::DealCards(Deck deck_) {
 }
 
 void GameEngine::GiftCards() {
-  for (size_t i = 0; i < kNumPlayers; i++) {
-    players_[(i + 1) % kNumPlayers].strategy_ptr_->receiveGift( //player to the right receives the gift
-        players_[i].strategy_ptr_->giftCards());
+  for (auto position = PlayerPosition(0); position < PlayerPosition::kNumPlayers; ((int&) position)++) {
+    players_[((size_t) position)].strategy_ptr_->receiveGift( //receive gift from player to his left (ie. with next index)
+        players_[((size_t) position + 1) % (size_t) PlayerPosition ::kNumPlayers].strategy_ptr_->giftCards());
   }
 }
 

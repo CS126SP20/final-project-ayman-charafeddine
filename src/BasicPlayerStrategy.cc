@@ -21,7 +21,9 @@ void BasicPlayerStrategy::receiveInitialCards(vector<Card> cards) {
 
 }
 vector<Card> BasicPlayerStrategy::giftCards() {
-  return vector<Card>();
+  return vector<Card>({Card(Suit::Hearts, Rank::Six),
+                       Card(Suit::Hearts, Rank::Six),
+                       Card(Suit::Hearts, Rank::Six),});
 }
 Card BasicPlayerStrategy::playCard(vector<Card> cardsPlayed) {
   return {Suit::Hearts, Rank::Six};

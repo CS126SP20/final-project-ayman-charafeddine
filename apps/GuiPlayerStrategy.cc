@@ -1,6 +1,6 @@
 // Copyright (c) 2020 [Your Name]. All rights reserved.
 
-#include "my_app.h"
+#include "GuiPlayerStrategy.h"
 
 #include <cinder/app/App.h>
 #include <cinder/Font.h>
@@ -14,23 +14,26 @@
 
 
 
-namespace myapp {
+namespace gui {
 
 using cinder::app::KeyEvent;
 using cinder::loadImage;
 using cinder::Color;
 
-MyApp::MyApp() {
+using Suit = likha::Card::Suit;
+using Rank = likha::Card::Rank;
+
+GuiPlayerStrategy::GuiPlayerStrategy() {
   card_texture_ = cinder::gl::Texture::create(loadImage("/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-75-1.png"));
 }
 
-void MyApp::setup() {
+void GuiPlayerStrategy::setup() {
   cinder::gl::enableDepthWrite();
   cinder::gl::enableDepthRead();
   ImGui::Initialize();
 }
 
-void MyApp::update() {
+void GuiPlayerStrategy::update() {
   if (card_pos_change_ < 250.0f) {
     card_pos_change_ += 10.0f;
   } else {
@@ -39,15 +42,15 @@ void MyApp::update() {
   }
 }
 
-void MyApp::draw() {
+void GuiPlayerStrategy::draw() {
   cinder::gl::clear(Color(0.04f, 0.42f, 0));
   ImGui::Text("Hello, world!");
   DrawDealing();
 }
 
-void MyApp::keyDown(KeyEvent event) { }
+void GuiPlayerStrategy::keyDown(KeyEvent event) { }
 
-void MyApp::DrawDealing() {
+void GuiPlayerStrategy::DrawDealing() {
   cinder::gl::draw(card_texture_, getWindowCenter());
 
   cinder::gl::pushModelView();
@@ -66,4 +69,29 @@ void MyApp::DrawDealing() {
   cinder::gl::popModelView();
 }
 
-}  // namespace myapp
+string GuiPlayerStrategy::chooseName() const {
+  return std::__cxx11::string();
+}
+void GuiPlayerStrategy::receiveNames(string teammate_name_, vector<string> opponent_names_) {
+
+}
+void GuiPlayerStrategy::receiveInitialCards(vector<Card> cards) {
+
+}
+vector<Card> GuiPlayerStrategy::giftCards() {
+  return ;
+}
+void GuiPlayerStrategy::receiveGift(vector<Card> cards) {
+
+}
+Card GuiPlayerStrategy::playCard(vector<Card> cardsPlayed) {
+  return Card(Hearts, Six);
+}
+void GuiPlayerStrategy::receiveMoveValidation(string) {
+
+}
+void GuiPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {
+
+}
+
+}  // namespace gui

@@ -15,8 +15,8 @@ namespace likha {
 Deck::Deck() {
   std::vector<Card> tmp_cards_vector_;
 
-  for (Suit suit = Suit(0); suit < Suit::kNumSuits; ((int&) suit)++) {
-    for (Rank rank = Rank(0); rank < Rank::kNumRanks; ((int&) rank)++) {
+  for (auto suit = Suit(0); suit < Suit::kNumSuits; ((int&) suit)++) {
+    for (auto rank = Rank(0); rank < Rank::kNumRanks; ((int&) rank)++) {
       tmp_cards_vector_.emplace_back(suit, rank);
     }
   }
