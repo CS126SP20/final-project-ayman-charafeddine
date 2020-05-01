@@ -21,8 +21,8 @@ Dealer::Dealer(PlayerPosition set_position_, const cinder::vec2& set_center_, do
 void Dealer::Update(double new_elapsed_seconds_) {
   elapsed_seconds_ = new_elapsed_seconds_;
 
-  if (card_pos_change_ < 250.0f) {
-    card_pos_change_ += 10.0f;
+  if (card_pos_change_ < kCardPathLength) {
+    card_pos_change_ += kCardPathDelta;
   } else {
     card_pos_change_ = 0;
     cards_dealt_++;
@@ -31,17 +31,17 @@ void Dealer::Update(double new_elapsed_seconds_) {
   cinder::gl::draw(card_texture_, center_);
 
   cinder::gl::pushModelView();
-  if (cards_dealt_ >= 0 && cards_dealt_ < 13) {
+  if (cards_dealt_ >= 0 && cards_dealt_ < kNumCardsPerPlayer) {
     cinder::gl::translate(center_.x - card_pos_change_, center_.y);
-  } else if (cards_dealt_ >= 13 && cards_dealt_ < 26) {
+  } else if (cards_dealt_ >= kNumCardsPerPlayer && cards_dealt_ < 2 * kNumCardsPerPlayer) {
     cinder::gl::translate(center_.x, center_.y - card_pos_change_);
-  } else if (cards_dealt_ >= 26 && cards_dealt_ < 39) {
+  } else if (cards_dealt_ >= 2 * kNumCardsPerPlayer && cards_dealt_ < 3 * kNumCardsPerPlayer) {
     cinder::gl::translate(center_.x + card_pos_change_, center_.y);
-  } else if (cards_dealt_ >= 39 && cards_dealt_ < 52) {
+  } else if (cards_dealt_ >= 3 * kNumCardsPerPlayer && cards_dealt_ < 4 * kNumCardsPerPlayer) {
     cinder::gl::translate(center_.x, center_.y  + card_pos_change_);
   }
-  cinder::gl::rotate(float(elapsed_seconds_ * 8.0));
-  cinder::gl::translate(-37.5f, -53.5f);
+  cinder::gl::rotate(float(elapsed_seconds_ * kRotationSpeed));
+  cinder::gl::translate(-kImageWidth, -kImageLength);
   cinder::gl::draw(card_texture_);
   cinder::gl::popModelView();
 }

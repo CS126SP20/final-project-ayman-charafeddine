@@ -14,6 +14,12 @@ using namespace likha;
 
 static const vector<string> suits = {"diamonds", "hearts", "spades", "clubs"};
 static const vector<string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
+static constexpr float kImageWidth = 37.5f;
+static constexpr float kImageLength = 53.5f;
+static constexpr double kRotationSpeed = 8.0;
+static constexpr float kCardPathLength = 250.0f;
+static constexpr float kCardPathDelta = 10.0f;
+
 
 class Dealer {
  public:
