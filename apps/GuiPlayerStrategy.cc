@@ -25,14 +25,15 @@ using Suit = likha::Card::Suit;
 using Rank = likha::Card::Rank;
 
 GuiPlayerStrategy::GuiPlayerStrategy() {
+  dealer_ = Dealer(PlayerPosition::kNumPlayers, getWindowCenter(), getElapsedSeconds());
+  state_ = GameState::Dealing;
+
 }
 
 void GuiPlayerStrategy::setup() {
   cinder::gl::enableDepthWrite();
   cinder::gl::enableDepthRead();
   ImGui::Initialize();
-  dealer_ = Dealer(PlayerPosition::kNumPlayers, getWindowCenter(), getElapsedSeconds());
-  state_ = GameState::Dealing;
 }
 
 void GuiPlayerStrategy::update() {
@@ -49,7 +50,9 @@ void GuiPlayerStrategy::draw() {
 void GuiPlayerStrategy::keyDown(KeyEvent event) { }
 
 string GuiPlayerStrategy::chooseName() const {
-  return std::__cxx11::string();
+//  string *name = nullptr;
+//  ImGui::InputText("name", name);
+//  return *name;
 }
 void GuiPlayerStrategy::receiveNames(string teammate_name_, vector<string> opponent_names_) {
 

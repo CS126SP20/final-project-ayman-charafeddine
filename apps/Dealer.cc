@@ -14,7 +14,7 @@ using cinder::Color;
 
 Dealer::Dealer(PlayerPosition set_position_, const cinder::vec2& set_center_, double set_elapsed_seconds_) {
   position_ = set_position_;
-  card_texture_ = cinder::gl::Texture::create(loadImage("/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-75-1.png"));
+  card_texture_ = cinder::gl::Texture::create(loadImage("/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png"));
   center_ = set_center_;
   elapsed_seconds_ = set_elapsed_seconds_;
 }
@@ -45,6 +45,13 @@ void Dealer::Update(double new_elapsed_seconds_) {
   cinder::gl::draw(card_texture_);
   cinder::gl::popModelView();
 }
+
+string Dealer::GetCardImagePath(likha::Card card) {
+  string suit = suits[(size_t) card.GetSuit()];
+  string rank = ranks[(size_t) card.GetRank()];
+  return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit + "-" + rank + ".png";
+}
+
 Dealer::Dealer() = default;
 
 }
