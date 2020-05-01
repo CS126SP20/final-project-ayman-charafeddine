@@ -12,6 +12,8 @@ namespace gui {
 
 using namespace likha;
 
+static constexpr float kBottomOfWindow = 780.0f;
+
 enum class GameState {
   SetUp,
   Dealing,
@@ -40,6 +42,8 @@ enum class GameState {
  private:
    GameState state_;
    Dealer dealer_;
+   vector<Card> hand_;
+   void DrawHand();
 };
 
 }  // namespace gui

@@ -14,11 +14,11 @@ using namespace likha;
 
 static const vector<string> suits = {"diamonds", "hearts", "spades", "clubs"};
 static const vector<string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
-static constexpr float kImageWidth = 37.5f;
-static constexpr float kImageLength = 53.5f;
+static constexpr float kImageHalfWidth = 37.5f;
+static constexpr float kImageHalfLength = 53.5f;
 static constexpr double kRotationSpeed = 8.0;
 static constexpr float kCardPathLength = 250.0f;
-static constexpr float kCardPathDelta = 10.0f;
+static constexpr float kCardPathDelta = 100.0f;
 
 
 class Dealer {
@@ -27,6 +27,7 @@ class Dealer {
   Dealer();
   void Update(double new_elapsed_seconds_);
   static string GetCardImagePath(Card card);
+  bool DealingComplete();
  private:
   PlayerPosition position_;
   cinder::gl::TextureRef card_texture_;

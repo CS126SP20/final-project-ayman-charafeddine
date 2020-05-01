@@ -41,7 +41,7 @@ void Dealer::Update(double new_elapsed_seconds_) {
     cinder::gl::translate(center_.x, center_.y  + card_pos_change_);
   }
   cinder::gl::rotate(float(elapsed_seconds_ * kRotationSpeed));
-  cinder::gl::translate(-kImageWidth, -kImageLength);
+  cinder::gl::translate(-kImageHalfWidth, -kImageHalfLength);
   cinder::gl::draw(card_texture_);
   cinder::gl::popModelView();
 }
@@ -50,6 +50,9 @@ string Dealer::GetCardImagePath(likha::Card card) {
   string suit = suits[(size_t) card.GetSuit()];
   string rank = ranks[(size_t) card.GetRank()];
   return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit + "-" + rank + ".png";
+}
+bool Dealer::DealingComplete() {
+  return cards_dealt_ >= 4 * kNumCardsPerPlayer;
 }
 
 Dealer::Dealer() = default;
