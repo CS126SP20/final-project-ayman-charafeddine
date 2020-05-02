@@ -7,63 +7,65 @@
 
 namespace likha {
 
-GameEngine::GameEngine(vector<PlayerStrategy*> playerStrategies_) {
-  for (size_t i = 0; i < (size_t) PlayerPosition::kNumPlayers; i++) {
-    PlayerStrategy* strategy = playerStrategies_[i];
+GameEngine::GameEngine() {
+  for (size_t i = 0; i < kNumPlayers; i++) {
     Player player = {
-         strategy, // strategy_ptr_
-        playerStrategies_[i]->chooseName(), // name_
-        0, // score_
-        i % 2 // team_; Will give 0 for the first and third player, 1 for the second and fourth
+        0,
+        i % 2 // Player 0 and 2 in team 0, Player 1 and 3 (gui) in team 1.
     };
     players_.push_back(player);
   }
-  //TODO add name validation to prevent players from entering same name
+  current_player_index_ = 0;
 }
 
-GameEngine::~GameEngine() {
-  for (const auto& player : players_) {
-    delete player.strategy_ptr_;
-  }
-}
 
 void GameEngine::RunGame() {
 
 }
 
-void GameEngine::CommunicateNames() {
-  for (const auto& current_player_ : players_) {
-    string teammate_name_;
-    vector<string> opponent_names_;
-
-    for (const auto& other_player_ :players_) {
-      if (current_player_ == other_player_) {
-        continue;
-      } else if (current_player_.team_ == other_player_.team_) {
-        teammate_name_ = other_player_.name_;
-      } else {
-        opponent_names_.push_back(other_player_.name_);
-      }
-    }
-
-    current_player_.strategy_ptr_->receiveNames(teammate_name_, opponent_names_);
-  }
-}
-
-void GameEngine::DealCards(Deck deck_) {
+vector<vector<Card>> GameEngine::DealCards(Deck deck_) {
   for (const auto& player_ : players_) {
     vector<Card> cards_to_deal_;
     for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
       cards_to_deal_.push_back(deck_.Draw());
     }
-    player_.strategy_ptr_->receiveInitialCards(cards_to_deal_);
+    player_hands_.push_back(cards_to_deal_);
   }
+  return player_hands_;
 }
 
+
+/*
 void GameEngine::GiftCards() {
   for (auto position = PlayerPosition(0); position < PlayerPosition::kNumPlayers; ((int&) position)++) {
     players_[((size_t) position)].strategy_ptr_->receiveGift( //receive gift from player to his left (ie. with next index)
         players_[((size_t) position + 1) % (size_t) PlayerPosition ::kNumPlayers].strategy_ptr_->giftCards());
+  }
+}
+ */
+
+size_t GameEngine::getCurrentPlayerIndex() {
+  return 0;
+}
+void GameEngine::handlePlayedCard(Card card) {
+
+
+  current_player_index_ = (current_player_index_ + 1) % kNumPlayers;
+}
+
+bool GameEngine::isValidCard() {
+  return false;
+}
+void GameEngine::SetUp() {
+
+}
+void GameEngine::addUpScores() {
+  for (size_t player_index = 0; player_index < kNumPlayers; player_index++) {
+    size_t current_player_score_ = 0;
+    for (const auto& card : player_cards_eaten_[player_index]) {
+      current_player_score_ += card.GetPointValue();
+    }
+    players_[player_index].score_ += current_player_score_;
   }
 }
 

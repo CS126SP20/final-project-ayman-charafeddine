@@ -3,7 +3,7 @@
 #include <cinder/app/App.h>
 #include <cinder/app/RendererGl.h>
 
-#include "GuiPlayerStrategy.h"
+#include "CardTableApp.h"
 
 
 using cinder::app::App;
@@ -25,6 +25,6 @@ void SetUp(App::Settings* settings) {
 
 
 // This is a macro that runs the application.
-CINDER_APP(gui::GuiPlayerStrategy,
+CINDER_APP(gui::CardTableApp,
            RendererGl(RendererGl::Options().msaa(gui::kSamples)),
            gui::SetUp)

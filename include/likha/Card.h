@@ -43,7 +43,7 @@ class Card {
   };
 
   Card(Suit set_suit, Rank set_rank);
-  size_t GetPointValue();
+  size_t GetPointValue() const;
   Suit GetSuit() const;
   Rank GetRank() const;
 

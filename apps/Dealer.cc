@@ -7,14 +7,17 @@
 #include <cinder/ImageIo.h>
 #include "Dealer.h"
 
+namespace likha {
+
 namespace gui {
 
 using cinder::loadImage;
 using cinder::Color;
 
-Dealer::Dealer(PlayerPosition set_position_, const cinder::vec2& set_center_, double set_elapsed_seconds_) {
+Dealer::Dealer(PlayerPosition set_position_, const cinder::vec2 &set_center_, double set_elapsed_seconds_) {
   position_ = set_position_;
-  card_texture_ = cinder::gl::Texture::create(loadImage("/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png"));
+  card_texture_ = cinder::gl::Texture::create(loadImage(
+      "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png"));
   center_ = set_center_;
   elapsed_seconds_ = set_elapsed_seconds_;
 }
@@ -38,7 +41,7 @@ void Dealer::Update(double new_elapsed_seconds_) {
   } else if (cards_dealt_ >= 2 * kNumCardsPerPlayer && cards_dealt_ < 3 * kNumCardsPerPlayer) {
     cinder::gl::translate(center_.x + card_pos_change_, center_.y);
   } else if (cards_dealt_ >= 3 * kNumCardsPerPlayer && cards_dealt_ < 4 * kNumCardsPerPlayer) {
-    cinder::gl::translate(center_.x, center_.y  + card_pos_change_);
+    cinder::gl::translate(center_.x, center_.y + card_pos_change_);
   }
   cinder::gl::rotate(float(elapsed_seconds_ * kRotationSpeed));
   cinder::gl::translate(-kImageHalfWidth, -kImageHalfLength);
@@ -56,5 +59,7 @@ bool Dealer::DealingComplete() {
 }
 
 Dealer::Dealer() = default;
+
+}
 
 }

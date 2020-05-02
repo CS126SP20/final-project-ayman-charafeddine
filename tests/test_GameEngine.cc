@@ -13,7 +13,7 @@ TEST_CASE("test constructor") {
   for (size_t i = 0; i < kNumPlayers; i++) {
     players.push_back(new BasicPlayerStrategy());
   }
-  GameEngine game_engine_(players);
+  GameEngine game_engine_;
 
   SECTION("test teams are correct") {
     SECTION("player 0") {
@@ -27,12 +27,6 @@ TEST_CASE("test constructor") {
     }
     SECTION("player 3") {
       REQUIRE(game_engine_.players_[3].team_ == 1);
-    }
-  }
-
-  SECTION("test that strategies are all BasicPlayerStrategies") {
-    for (size_t i = 0; i < kNumPlayers; i++) {
-      REQUIRE(dynamic_cast<BasicPlayerStrategy*>(game_engine_.players_[i].strategy_ptr_) != nullptr);
     }
   }
 

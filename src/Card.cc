@@ -12,7 +12,7 @@ Card::Card(Card::Suit set_suit, Card::Rank set_rank) {
   rank = set_rank;
 }
 
-size_t Card::GetPointValue() {
+size_t Card::GetPointValue() const {
   if (suit == Suit::Hearts) {
     return kHeartsValue;
   }
