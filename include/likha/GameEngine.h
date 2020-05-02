@@ -33,7 +33,7 @@ class GameEngine {
     size_t team_;
   };
 
-  bool isValidCard();
+  bool isValidCard(Card card);
   void addUpScores();
 
   size_t current_player_index_;

@@ -4,6 +4,7 @@
 
 #include <likha/GameEngine.h>
 #include <cmath>
+#include <algorithm>
 
 namespace likha {
 
@@ -46,13 +47,21 @@ void GameEngine::GiftCards() {
 
 
 bool GameEngine::ValidateCard(Card card) {
-  if ()
-
-  current_player_index_ = (current_player_index_ + 1) % kNumPlayers;
+  if (isValidCard(card)) {
+    vector<Card> current_hand_ = player_hands_[current_player_index_];
+    //Remove card from player Hand
+    current_hand_.erase(std::remove(current_hand_.begin(), current_hand_.end(), card),
+        current_hand_.end());
+    //Update current player index
+    current_player_index_ = (current_player_index_ + 1) % kNumPlayers;
+    return true;
+  } else {
+    return false;
+  }
 }
 
-bool GameEngine::isValidCard() {
-  return false;
+bool GameEngine::isValidCard(Card card) {
+  if ()
 }
 void GameEngine::SetUp() {
 
