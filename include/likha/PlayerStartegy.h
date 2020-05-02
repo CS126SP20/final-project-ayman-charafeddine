@@ -25,7 +25,7 @@ class PlayerStrategy {
   virtual vector<Card> giftCards() = 0;
   virtual void receiveGift(vector<Card> gift) = 0;
   virtual Card playCard(vector<Card> cardsPlayed) = 0;
-  virtual void receiveMoveValidation(string) = 0;
+  virtual void receiveMoveValidation(bool isValid) = 0;
   virtual void receiveCurrentScores(map<string, size_t> currentScores) = 0;
   virtual ~PlayerStrategy() = default;
 };

@@ -17,7 +17,7 @@ class BasicPlayerStrategy : public PlayerStrategy {
   vector<Card> giftCards() override;
   void receiveGift(vector<Card> cards) override;
   Card playCard(vector<Card> cardsPlayed) override;
-  void receiveMoveValidation(string) override;
+  void receiveMoveValidation(bool isValid) override;
   void receiveCurrentScores(map<string, size_t> currentScores) override;
   ~BasicPlayerStrategy() override = default;
 };

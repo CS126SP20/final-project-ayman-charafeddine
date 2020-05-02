@@ -44,11 +44,9 @@ void GameEngine::GiftCards() {
 }
  */
 
-size_t GameEngine::getCurrentPlayerIndex() {
-  return 0;
-}
-void GameEngine::handlePlayedCard(Card card) {
 
+bool GameEngine::ValidateCard(Card card) {
+  if ()
 
   current_player_index_ = (current_player_index_ + 1) % kNumPlayers;
 }

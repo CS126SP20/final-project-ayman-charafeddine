@@ -40,18 +40,25 @@ void CardTableApp::setup() {
     strategies_.push_back(strategy);
   }
 
+  current_index_ = game_engine_.GetCurrentPlayerIndex();
+
 }
 
 void CardTableApp::update() {
   if (state_ == GameState::TrickPlaying) {
-    if (game_engine_.GetCurrentPlayerIndex() != kHumanPlayerIndex) {
-      Card card_to_play_ = strategies_[game_engine_.GetCurrentPlayerIndex()]
-          ->playCard(current_trick_);
-      game_engine_.handlePlayedCard(card_to_play_);
+    PlayerStrategy* current_strategy_ = strategies_[current_index_];
 
+    if (current_index_ != kHumanPlayerIndex) {
+      Card card_to_play_ = current_strategy_->playCard(current_trick_);
+      if (game_engine_.ValidateCard(card_to_play_)) {
+        current_strategy_->receiveMoveValidation(true);
+        current_trick_.push_back(card_to_play_);
+        current_index_ = (current_index_ + 1) % kNumPlayers;
+      } else {
+        current_strategy_->receiveMoveValidation(false);
+      }
     }
   }
-
 }
 
 void CardTableApp::draw() {
@@ -60,6 +67,11 @@ void CardTableApp::draw() {
     dealer_.Update(getElapsedSeconds());
   } else {
     DrawHand();
+    if (current_index_ == kHumanPlayerIndex) {
+      //input
+    } else {
+      DrawCardPlayed(current_trick_, current_index_);
+    }
   }
 }
 
@@ -72,6 +84,9 @@ void CardTableApp::DrawHand() {
     cinder::gl::draw(card_texture_, {x_position_, kBottomOfWindow - kImageHalfLength * 2});
     x_position_ -= kImageHalfWidth;
   }
+}
+void CardTableApp::DrawCardPlayed(vector<Card> current_trick_, size_t current_index_) {
+
 }
 
 }  // namespace gui

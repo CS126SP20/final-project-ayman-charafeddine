@@ -37,8 +37,10 @@ class CardTableApp : public cinder::app::App {
   vector<Card> hand_;
   void DrawHand();
   GameEngine game_engine_;
-  vector<PlayerStrategy *> strategies_;
+  vector<PlayerStrategy*> strategies_;
   vector<Card> current_trick_;
+  size_t current_index_;
+  void DrawCardPlayed(vector<Card> current_trick_, size_t current_index_);
 };
 
 }  // namespace gui

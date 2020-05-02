@@ -28,7 +28,7 @@ vector<Card> BasicPlayerStrategy::giftCards() {
 Card BasicPlayerStrategy::playCard(vector<Card> cardsPlayed) {
   return {Suit::Hearts, Rank::Six};
 }
-void BasicPlayerStrategy::receiveMoveValidation(string) {
+void BasicPlayerStrategy::receiveMoveValidation(bool isValid) {
 
 }
 void BasicPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {

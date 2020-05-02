@@ -33,7 +33,6 @@ class GameEngine {
     size_t team_;
   };
 
-  size_t getCurrentPlayerIndex();
   bool isValidCard();
   void addUpScores();
 
@@ -41,6 +40,7 @@ class GameEngine {
   vector<vector<Card>> player_hands_;
   vector<Player> players_;
   vector<vector<Card>> player_cards_eaten_;
+  bool last_card_was_valid_;
 
 
   // void GiftCards();
@@ -53,7 +53,7 @@ class GameEngine {
   vector<vector<Card>> DealCards(Deck deck_);
   void SetUp();
   void RunGame();
-  void handlePlayedCard(Card card);
+  bool ValidateCard(Card card);
 
 
 };
