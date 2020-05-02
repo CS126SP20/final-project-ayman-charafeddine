@@ -11,7 +11,7 @@
 #include <cinder/gl/gl.h>
 
 #include <cinder/CinderImGui.h>
-
+#include <likha/BasicPlayerStrategy.h>
 
 namespace likha {
 
@@ -26,23 +26,30 @@ using Rank = likha::Card::Rank;
 
 CardTableApp::CardTableApp() {
   dealer_ = Dealer(PlayerPosition::kNumPlayers, getWindowCenter(), getElapsedSeconds());
-  state_ = GameState::Dealing;
-  game_engine_ = GameEngine()
+  state_ = GameState::SetUp;
+  game_engine_ = GameEngine();
 }
 
 void CardTableApp::setup() {
   cinder::gl::enableDepthWrite();
   cinder::gl::enableDepthRead();
   ImGui::Initialize();
-  Deck deck;
-  for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
-    hand_.push_back(deck.Draw());
+
+  for (size_t i = 0; i < kNumPlayers - 1; i++) {
+    PlayerStrategy* strategy = new BasicPlayerStrategy();
+    strategies_.push_back(strategy);
   }
+
 }
 
 void CardTableApp::update() {
-  if (dealer_.DealingComplete()) {
-    state_ = GameState::Gifting;
+  if (state_ == GameState::TrickPlaying) {
+    if (game_engine_.GetCurrentPlayerIndex() != kHumanPlayerIndex) {
+      Card card_to_play_ = strategies_[game_engine_.GetCurrentPlayerIndex()]
+          ->playCard(current_trick_);
+      game_engine_.handlePlayedCard(card_to_play_);
+
+    }
   }
 
 }

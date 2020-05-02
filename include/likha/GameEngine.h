@@ -34,7 +34,6 @@ class GameEngine {
   };
 
   size_t getCurrentPlayerIndex();
-  void handlePlayedCard(Card card);
   bool isValidCard();
   void addUpScores();
 
@@ -50,9 +49,12 @@ class GameEngine {
 
   explicit GameEngine();
 
+  size_t GetCurrentPlayerIndex();
   vector<vector<Card>> DealCards(Deck deck_);
   void SetUp();
   void RunGame();
+  void handlePlayedCard(Card card);
+
 
 };
 

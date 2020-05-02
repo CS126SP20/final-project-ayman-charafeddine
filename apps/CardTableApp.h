@@ -13,6 +13,7 @@ namespace likha {
 namespace gui {
 
 static constexpr float kBottomOfWindow = 780.0f;
+static constexpr size_t kHumanPlayerIndex = 3;
 
 enum class GameState {
   SetUp,
@@ -37,6 +38,7 @@ class CardTableApp : public cinder::app::App {
   void DrawHand();
   GameEngine game_engine_;
   vector<PlayerStrategy *> strategies_;
+  vector<Card> current_trick_;
 };
 
 }  // namespace gui

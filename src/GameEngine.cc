@@ -68,5 +68,8 @@ void GameEngine::addUpScores() {
     players_[player_index].score_ += current_player_score_;
   }
 }
+size_t GameEngine::GetCurrentPlayerIndex() {
+  return current_player_index_;
+}
 
 }
