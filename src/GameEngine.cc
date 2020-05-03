@@ -61,8 +61,12 @@ bool GameEngine::HandleAndValidateCard(Card card) {
         current_hand_.end());
     //Add card to current trick
     current_trick_.push_back(card);
+    //If end of trick, add to eaten cards vector and restart trick
     if (current_trick_.size() == kNumPlayers) {
-     // Add(current_trick_);
+      for (const auto& card_in_trick_ : current_trick_) {
+        player_cards_eaten_[GetCurrentTrickEaterIndex()].push_back(card_in_trick_);
+        current_trick_.clear();
+      }
     }
     return true;
   } else {
@@ -70,12 +74,17 @@ bool GameEngine::HandleAndValidateCard(Card card) {
   }
 }
 
+
 bool GameEngine::isValidCard(Card card) {
   vector<Card> current_hand_ = player_hands_[current_player_index_];
 
   if (!vecContainsCard(card, current_hand_)) {
     //Player does not have that card, card is invalid
     return false;
+  }
+  if (current_trick_.empty()) {
+    //First player in trick can play any card he has
+    return true;
   }
   if (MustPlayLikha() && !card.IsLikha()) {
     //Player is required to play the Likha but is trying to play a different card, card is invalid
@@ -108,21 +117,24 @@ size_t GameEngine::GetCurrentPlayerIndex() {
 }
 
 bool GameEngine::MustPlayLikha() {
-  if (!HasLikha()) {
+  if (!HasLikhaOfSuit(Suit::Spades) && !HasLikhaOfSuit(Suit::Diamonds)) {
     return false;
   }
+
   if (!HasSuit(current_suit_)) {
     return true; //Player doesn't have the required suit, so player must get rid of Likha
   }
-  if (current_suit_ == Suit::Spades || current_suit_ == Suit::Diamonds) {
+
+  if (current_suit_ == Suit::Spades) {
     for (const auto& card : current_trick_) {
-      if (card.IsHigherThanLikha()) {
+      if (card.EatsLikha(current_suit_) && HasLikhaOfSuit(current_suit_)) {
         return true; //One of the cards played are higher than Likha, so player must get rid of it
       }
     }
     return false;
   }
   return false;
+
 }
 
 bool GameEngine::HasSuit(Suit suit) {
@@ -140,11 +152,30 @@ bool GameEngine::vecContainsCard(Card card, vector<Card> cards) {
   return (std::find(cards.begin(), cards.end(), card) != cards.end());
 }
 
-bool GameEngine::HasLikha() {
+bool GameEngine::HasLikhaOfSuit(Suit suit_) {
   vector<Card> current_hand_ = player_hands_[current_player_index_];
 
-  return vecContainsCard(kDiamondLikha, current_hand_)
-  || vecContainsCard(kSpadeLikha, current_hand_);
+  if (suit_ == Suit::Diamonds) {
+    return vecContainsCard(kDiamondLikha, current_hand_);
+  }
+  if (suit_ == Suit::Spades) {
+    return   vecContainsCard(kSpadeLikha, current_hand_);
+  }
+  return false;
+}
+
+size_t GameEngine::GetCurrentTrickEaterIndex() {
+  Card highest_card(current_suit_, Rank::Two); //lowest possible card that can eat the trick
+  size_t eater_index_;
+  size_t opening_player_index_ = (current_player_index_ + 1) % kNumPlayers; //Index of player who opened the trick
+  for (size_t i = opening_player_index_; i < kNumPlayers; i = (i + 1) % kNumPlayers) {
+    if (current_trick_[i].GetSuit() == current_suit_
+    && current_trick_[i].GetRank() >= highest_card.GetRank()) {
+      eater_index_ = i;
+      highest_card = current_trick_[i];
+    }
+  }
+  return eater_index_;
 }
 
 }

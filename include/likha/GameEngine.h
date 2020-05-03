@@ -60,7 +60,8 @@ class GameEngine {
   bool MustPlayLikha();
   bool HasSuit(Card::Suit suit);
   static bool vecContainsCard(Card card, vector<Card> cards);
-  bool HasLikha();
+  bool HasLikhaOfSuit(Suit suit_);
+  size_t GetCurrentTrickEaterIndex();
 };
 
 }

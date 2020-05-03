@@ -48,9 +48,14 @@ bool Card::IsLikha() const {
   return (suit == Suit::Spades && rank == Rank::Queen)
   || (suit == Suit::Diamonds && rank == Rank::Ten);
 }
-bool Card::IsHigherThanLikha() const {
-  return (suit == Suit::Diamonds && rank > kDiamondLikha.rank)
-  || (suit == Suit::Spades && rank > kSpadeLikha.rank);
+bool Card::EatsLikha(Suit current_suit_) const {
+  if (current_suit_ == Suit::Spades) {
+    return rank > kSpadeLikha.rank;
+  }
+  if (current_suit_ == Suit::Diamonds) {
+    return rank > kDiamondLikha.rank;
+  }
+  return false;
 }
 
 } //namespace likha
