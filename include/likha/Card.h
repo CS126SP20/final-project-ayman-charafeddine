@@ -49,6 +49,8 @@ class Card {
 
   bool operator==(const Card& rhs) const;
 
+  bool IsLikha() const;
+  bool IsHigherThanLikha() const;
  private:
   Suit suit;
   Rank rank;

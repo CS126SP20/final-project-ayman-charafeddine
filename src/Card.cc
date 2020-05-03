@@ -3,9 +3,13 @@
 //
 
 #include <cstddef>
+#include <likha/Card.h>
 #include "likha/Card.h"
 
 namespace likha {
+
+const Card kDiamondLikha = Card(Card::Suit::Diamonds, Card::Rank::Ten);
+const Card kSpadeLikha = Card (Card::Suit::Spades, Card::Rank::Queen);
 
 Card::Card(Card::Suit set_suit, Card::Rank set_rank) {
   suit = set_suit;
@@ -35,8 +39,18 @@ Card::Suit Card::GetSuit() const {
 Card::Rank Card::GetRank() const {
   return rank;
 }
+
 bool Card::operator==(const Card& rhs) const {
   return rhs.GetRank() == rank && rhs.GetSuit() == suit;
+}
+
+bool Card::IsLikha() const {
+  return (suit == Suit::Spades && rank == Rank::Queen)
+  || (suit == Suit::Diamonds && rank == Rank::Ten);
+}
+bool Card::IsHigherThanLikha() const {
+  return (suit == Suit::Diamonds && rank > kDiamondLikha.rank)
+  || (suit == Suit::Spades && rank > kSpadeLikha.rank);
 }
 
 } //namespace likha

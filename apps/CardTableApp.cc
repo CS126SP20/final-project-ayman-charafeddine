@@ -50,7 +50,7 @@ void CardTableApp::update() {
 
     if (current_index_ != kHumanPlayerIndex) {
       Card card_to_play_ = current_strategy_->playCard(current_trick_);
-      if (game_engine_.ValidateCard(card_to_play_)) {
+      if (game_engine_.HandleAndValidateCard(card_to_play_)) {
         current_strategy_->receiveMoveValidation(true);
         current_trick_.push_back(card_to_play_);
         current_index_ = (current_index_ + 1) % kNumPlayers;

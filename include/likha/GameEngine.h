@@ -41,6 +41,8 @@ class GameEngine {
   vector<Player> players_;
   vector<vector<Card>> player_cards_eaten_;
   bool last_card_was_valid_;
+  Card::Suit current_suit_;
+  vector<Card> current_trick_;
 
 
   // void GiftCards();
@@ -53,9 +55,12 @@ class GameEngine {
   vector<vector<Card>> DealCards(Deck deck_);
   void SetUp();
   void RunGame();
-  bool ValidateCard(Card card);
+  bool HandleAndValidateCard(Card card);
 
-
+  bool MustPlayLikha();
+  bool HasSuit(Card::Suit suit);
+  static bool vecContainsCard(Card card, vector<Card> cards);
+  bool HasLikha();
 };
 
 }
