@@ -55,7 +55,6 @@ void CardTableApp::setup() {
 }
 
 void CardTableApp::update() {
-  dealer_.Update(getElapsedSeconds());
 
 //  if (current_trick_.empty() || current_trick_[current_trick_index_].HasCardBeenDrawn()) {
 //    state_ = GameState::TrickTaking;
@@ -82,7 +81,9 @@ void CardTableApp::update() {
 }
 
 void CardTableApp::draw() {
-//  cinder::gl::clear(Color(0.04f, 0.42f, 0));
+  cinder::gl::clear(Color(0.04f, 0.42f, 0));
+  dealer_.Update(getElapsedSeconds());
+
 //  if (state_ == GameState::Dealing) {
 //    dealer_.Update(getElapsedSeconds());
 //  } else {

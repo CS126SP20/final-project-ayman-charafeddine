@@ -14,10 +14,10 @@ namespace likha {
 namespace gui {
 
 static const cinder::vec2 kCenter = {400, 400};
-static const cinder::vec2 kFirstCardLeftPlayer = {kCardImageHalfWidth * 2, 200};
-static const cinder::vec2 kFirstCardTopPlayer = {200, kCardImageHalfLength * 2};
-static const cinder::vec2 kFirstCardRightPlayer = {800 - kCardImageHalfWidth * 2, 200};
-static const cinder::vec2 kFirstCardBottomPlayer = {800 - kCardImageHalfLength * 2, 200};
+static const cinder::vec2 kFirstCardLeftPlayer = {0, 150};
+static const cinder::vec2 kFirstCardTopPlayer = {150, 0};
+static const cinder::vec2 kFirstCardRightPlayer = {800 - kCardImageHalfWidth * 2, 150};
+static const cinder::vec2 kFirstCardBottomPlayer = {150, 800 - kCardImageHalfLength * 2};
 
 class Dealer {
  public:

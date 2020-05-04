@@ -15,8 +15,8 @@ using cinder::loadImage;
 using cinder::Color;
 
 Dealer::Dealer(vector<Card> hand_) {
+  card_drawers_ = vector<vector<CardDrawer>> (4, vector<CardDrawer>());
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
-    card_drawers_ = vector<vector<CardDrawer>> (4, vector<CardDrawer>());
     CardDrawer left_card_(kCenter,{kFirstCardLeftPlayer.x, kFirstCardLeftPlayer.y + kCardImageHalfWidth * i});
     CardDrawer top_card_(kCenter, {kFirstCardTopPlayer.x + kCardImageHalfWidth * i, kFirstCardTopPlayer.y});
     CardDrawer right_card_(kCenter, {kFirstCardRightPlayer.x, kFirstCardRightPlayer.y + kCardImageHalfWidth * i});
