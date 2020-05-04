@@ -4,9 +4,13 @@
 
 #include <cstddef>
 #include <likha/Card.h>
+#include <cinder/gl/gl.h>
 #include "likha/Card.h"
 
+
+
 namespace likha {
+
 
 const Card kDiamondLikha = Card(Card::Suit::Diamonds, Card::Rank::Ten);
 const Card kSpadeLikha = Card (Card::Suit::Spades, Card::Rank::Queen);
@@ -14,6 +18,9 @@ const Card kSpadeLikha = Card (Card::Suit::Spades, Card::Rank::Queen);
 Card::Card(Card::Suit set_suit, Card::Rank set_rank) {
   suit = set_suit;
   rank = set_rank;
+  card_drawn_ = false;
+  card_current_x_position_ = kCardPathLength;
+  card_current_y_position_ = 900;
 }
 
 size_t Card::GetPointValue() const {
@@ -48,6 +55,7 @@ bool Card::IsLikha() const {
   return (suit == Suit::Spades && rank == Rank::Queen)
   || (suit == Suit::Diamonds && rank == Rank::Ten);
 }
+
 bool Card::EatsLikha(Suit current_suit_) const {
   if (current_suit_ == Suit::Spades) {
     return rank > kSpadeLikha.rank;
@@ -58,4 +66,35 @@ bool Card::EatsLikha(Suit current_suit_) const {
   return false;
 }
 
+string Card::GetCardImagePath() const {
+  string suit_string_ = suits[(size_t) suit];
+  string rank_string_ = ranks[(size_t) rank];
+  return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit_string_ + "-" + rank_string_ + ".png";
+}
+
+void Card::DrawCardPlayed(size_t current_index_, cinder::vec2 center_, double elapsed_seconds_) {
+
+  if (card_current_x_position_ > 0) {
+    card_current_x_position_ -= kCardPathDelta;
+  } else {
+    card_drawn_ = true;
+  }
+
+  cinder::gl::TextureRef card_texture_ = cinder::gl::Texture::create(loadImage(GetCardImagePath()));
+
+  cinder::gl::pushModelView();
+  cinder::gl::translate(center_.x - card_current_x_position_ , center_.y);
+  cinder::gl::rotate(float(elapsed_seconds_ * kCardRotationSpeed));
+  cinder::gl::translate(-kCardImageHalfWidth, -kCardImageHalfLength);
+  cinder::gl::draw(card_texture_);
+  cinder::gl::popModelView();
+
+  if (card_current_x_position_ <= 0) {
+    cinder::gl::draw(card_texture_, center_);
+  }
+
+}
+bool Card::HasCardBeenDrawn() {
+  return card_drawn_;
+}
 } //namespace likha

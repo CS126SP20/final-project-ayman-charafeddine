@@ -8,8 +8,7 @@
 #include "Card.h"
 #include "Deck.h"
 #include "PlayerStartegy.h"
-#include <vector>
-#include <string>
+
 
 using std::vector;
 using std::string;
@@ -17,14 +16,6 @@ using std::string;
 namespace likha {
 
 static constexpr size_t kNumPlayers = 4;
-
-enum class PlayerPosition {
-  top,
-  right,
-  bottom,
-  left,
-  kNumPlayers
-};
 
 class GameEngine {
  private:
@@ -40,7 +31,7 @@ class GameEngine {
   vector<vector<Card>> player_hands_;
   vector<Player> players_;
   vector<vector<Card>> player_cards_eaten_;
-  bool last_card_was_valid_;
+  bool last_card_was_valid_{};
   Card::Suit current_suit_;
   vector<Card> current_trick_;
 
@@ -60,7 +51,7 @@ class GameEngine {
   bool MustPlayLikha();
   bool HasSuit(Card::Suit suit);
   static bool vecContainsCard(Card card, vector<Card> cards);
-  bool HasLikhaOfSuit(Suit suit_);
+  bool HasLikhaOfSuit(Card::Suit suit_);
   size_t GetCurrentTrickEaterIndex();
 };
 

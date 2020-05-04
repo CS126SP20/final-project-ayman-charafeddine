@@ -14,51 +14,42 @@ namespace gui {
 using cinder::loadImage;
 using cinder::Color;
 
-Dealer::Dealer(PlayerPosition set_position_, const cinder::vec2 &set_center_, double set_elapsed_seconds_) {
-  position_ = set_position_;
-  card_texture_ = cinder::gl::Texture::create(loadImage(
-      "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png"));
-  center_ = set_center_;
-  elapsed_seconds_ = set_elapsed_seconds_;
-}
-void Dealer::Update(double new_elapsed_seconds_) {
-  elapsed_seconds_ = new_elapsed_seconds_;
-
-  if (card_pos_change_ < kCardPathLength) {
-    card_pos_change_ += kCardPathDelta;
-  } else {
-    card_pos_change_ = 0;
-    cards_dealt_++;
+Dealer::Dealer(vector<Card> hand_) {
+  for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
+    card_drawers_ = vector<vector<CardDrawer>> (4, vector<CardDrawer>());
+    CardDrawer left_card_(kCenter,{kFirstCardLeftPlayer.x, kFirstCardLeftPlayer.y + kCardImageHalfWidth * i});
+    CardDrawer top_card_(kCenter, {kFirstCardTopPlayer.x + kCardImageHalfWidth * i, kFirstCardTopPlayer.y});
+    CardDrawer right_card_(kCenter, {kFirstCardRightPlayer.x, kFirstCardRightPlayer.y + kCardImageHalfWidth * i});
+    card_drawers_[0].push_back(left_card_);
+    card_drawers_[1].push_back(top_card_);
+    card_drawers_[2].push_back(right_card_);
   }
-
-  cinder::gl::draw(card_texture_, center_);
-
-  cinder::gl::pushModelView();
-  if (cards_dealt_ >= 0 && cards_dealt_ < kNumCardsPerPlayer) {
-    cinder::gl::translate(center_.x - card_pos_change_, center_.y);
-  } else if (cards_dealt_ >= kNumCardsPerPlayer && cards_dealt_ < 2 * kNumCardsPerPlayer) {
-    cinder::gl::translate(center_.x, center_.y - card_pos_change_);
-  } else if (cards_dealt_ >= 2 * kNumCardsPerPlayer && cards_dealt_ < 3 * kNumCardsPerPlayer) {
-    cinder::gl::translate(center_.x + card_pos_change_, center_.y);
-  } else if (cards_dealt_ >= 3 * kNumCardsPerPlayer && cards_dealt_ < 4 * kNumCardsPerPlayer) {
-    cinder::gl::translate(center_.x, center_.y + card_pos_change_);
+  for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
+    CardDrawer user_card_(kCenter, {kFirstCardBottomPlayer.x + kCardImageHalfWidth * i, kFirstCardBottomPlayer.y}, hand_[i]);
+    card_drawers_[3].push_back(user_card_);
   }
-  cinder::gl::rotate(float(elapsed_seconds_ * kRotationSpeed));
-  cinder::gl::translate(-kImageHalfWidth, -kImageHalfLength);
-  cinder::gl::draw(card_texture_);
-  cinder::gl::popModelView();
-}
-
-string Dealer::GetCardImagePath(likha::Card card) {
-  string suit = suits[(size_t) card.GetSuit()];
-  string rank = ranks[(size_t) card.GetRank()];
-  return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit + "-" + rank + ".png";
-}
-bool Dealer::DealingComplete() {
-  return cards_dealt_ >= 4 * kNumCardsPerPlayer;
 }
 
 Dealer::Dealer() = default;
+
+void Dealer::Update(double new_elapsed_seconds_) {
+  for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
+    for (size_t j = 0; j < kNumPlayers; j++) {
+      card_drawers_[j][i].UpdateAndDraw(new_elapsed_seconds_);
+    }
+  }
+}
+
+bool Dealer::DealingComplete() {
+  for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
+    for (size_t j = 0; j < kNumPlayers; j++) {
+      if (!card_drawers_[j][i].ReachedEndPosition()) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 }
 

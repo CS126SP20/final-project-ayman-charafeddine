@@ -24,6 +24,8 @@ GameEngine::GameEngine() {
     players_.push_back(player);
   }
   current_player_index_ = 0;
+  last_card_was_valid_ = false;
+  current_suit_ = Suit::kNumSuits;
 }
 
 
@@ -55,7 +57,7 @@ void GameEngine::GiftCards() {
 
 bool GameEngine::HandleAndValidateCard(Card card) {
   if (isValidCard(card)) {
-    vector<Card> current_hand_ = player_hands_[current_player_index_];
+    vector<Card>& current_hand_ = player_hands_[current_player_index_];
     //Remove card from player Hand
     current_hand_.erase(std::remove(current_hand_.begin(), current_hand_.end(), card),
         current_hand_.end());
@@ -63,10 +65,13 @@ bool GameEngine::HandleAndValidateCard(Card card) {
     current_trick_.push_back(card);
     //If end of trick, add to eaten cards vector and restart trick
     if (current_trick_.size() == kNumPlayers) {
+      size_t trick_eater_index_ = GetCurrentTrickEaterIndex();
       for (const auto& card_in_trick_ : current_trick_) {
-        player_cards_eaten_[GetCurrentTrickEaterIndex()].push_back(card_in_trick_);
+        player_cards_eaten_[trick_eater_index_].push_back(card_in_trick_);
         current_trick_.clear();
       }
+      //Current trick eater should open the new trick
+      current_player_index_ = trick_eater_index_;
     }
     return true;
   } else {
@@ -118,17 +123,17 @@ size_t GameEngine::GetCurrentPlayerIndex() {
 
 bool GameEngine::MustPlayLikha() {
   if (!HasLikhaOfSuit(Suit::Spades) && !HasLikhaOfSuit(Suit::Diamonds)) {
-    return false;
+    return false; //Player doesn't have a likha
   }
 
   if (!HasSuit(current_suit_)) {
-    return true; //Player doesn't have the required suit, so player must get rid of Likha
+    return true; //Player doesn't have the required suit, so player must get rid of likha
   }
 
-  if (current_suit_ == Suit::Spades) {
+  if (current_suit_ == Suit::Spades || current_suit_ == Suit::Diamonds) {
     for (const auto& card : current_trick_) {
       if (card.EatsLikha(current_suit_) && HasLikhaOfSuit(current_suit_)) {
-        return true; //One of the cards played are higher than Likha, so player must get rid of it
+        return true; //One of the cards played are higher than likha, so player must get rid of it
       }
     }
     return false;

@@ -19,7 +19,8 @@ enum class GameState {
   SetUp,
   Dealing,
   Gifting,
-  TrickPlaying,
+  TrickTaking,
+  DrawingCardPlayed
 };
 
 class CardTableApp : public cinder::app::App {
@@ -31,6 +32,7 @@ class CardTableApp : public cinder::app::App {
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
 
+  ~CardTableApp() override;
  private:
   GameState state_;
   Dealer dealer_;
@@ -39,8 +41,8 @@ class CardTableApp : public cinder::app::App {
   GameEngine game_engine_;
   vector<PlayerStrategy*> strategies_;
   vector<Card> current_trick_;
-  size_t current_index_;
-  void DrawCardPlayed(vector<Card> current_trick_, size_t current_index_);
+  size_t current_player_index_;
+  size_t current_trick_index_;
 };
 
 }  // namespace gui

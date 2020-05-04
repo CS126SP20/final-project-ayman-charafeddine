@@ -18,7 +18,8 @@ void BasicPlayerStrategy::receiveNames(string teammate_name_, vector<string> opp
 
 }
 void BasicPlayerStrategy::receiveInitialCards(vector<Card> cards) {
-
+    my_hand_ = cards;
+    card_index_to_try_ = 0;
 }
 vector<Card> BasicPlayerStrategy::giftCards() {
   return vector<Card>({Card(Suit::Hearts, Rank::Six),
@@ -26,10 +27,12 @@ vector<Card> BasicPlayerStrategy::giftCards() {
                        Card(Suit::Hearts, Rank::Six),});
 }
 Card BasicPlayerStrategy::playCard(vector<Card> cardsPlayed) {
-  return {Suit::Hearts, Rank::Six};
+  return my_hand_[card_index_to_try_];
 }
 void BasicPlayerStrategy::receiveMoveValidation(bool isValid) {
-
+  if (!isValid) {
+    card_index_to_try_++;
+  }
 }
 void BasicPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {
 

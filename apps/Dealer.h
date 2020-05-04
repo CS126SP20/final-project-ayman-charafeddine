@@ -7,33 +7,27 @@
 
 #include <likha/GameEngine.h>
 #include <cinder/gl/Texture.h>
+#include <likha/CardDrawer.h>
 
 namespace likha {
 
 namespace gui {
 
-static const vector<string> suits = {"diamonds", "hearts", "spades", "clubs"};
-static const vector<string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
-static constexpr float kImageHalfWidth = 37.5f;
-static constexpr float kImageHalfLength = 53.5f;
-static constexpr double kRotationSpeed = 10.0;
-static constexpr float kCardPathLength = 250.0f;
-static constexpr float kCardPathDelta = 20.0f;
+static const cinder::vec2 kCenter = {400, 400};
+static const cinder::vec2 kFirstCardLeftPlayer = {kCardImageHalfWidth * 2, 200};
+static const cinder::vec2 kFirstCardTopPlayer = {200, kCardImageHalfLength * 2};
+static const cinder::vec2 kFirstCardRightPlayer = {800 - kCardImageHalfWidth * 2, 200};
+static const cinder::vec2 kFirstCardBottomPlayer = {800 - kCardImageHalfLength * 2, 200};
 
 class Dealer {
  public:
-  Dealer(PlayerPosition set_position_, const cinder::vec2 &set_center_, double set_elapsed_seconds_);
+  Dealer(vector<Card> hand_);
   Dealer();
   void Update(double new_elapsed_seconds_);
-  static string GetCardImagePath(Card card);
   bool DealingComplete();
  private:
-  PlayerPosition position_;
-  cinder::gl::TextureRef card_texture_;
-  size_t cards_dealt_{};
-  float card_pos_change_{};
-  cinder::vec2 center_;
-  double elapsed_seconds_{};
+  size_t cards_dealt_;
+  vector<vector<CardDrawer>> card_drawers_;
 
 };
 

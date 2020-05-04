@@ -20,6 +20,10 @@ class BasicPlayerStrategy : public PlayerStrategy {
   void receiveMoveValidation(bool isValid) override;
   void receiveCurrentScores(map<string, size_t> currentScores) override;
   ~BasicPlayerStrategy() override = default;
+ private:
+  vector<Card> my_hand_;
+  bool move_is_valid_;
+  size_t card_index_to_try_;
 };
 
 //TODO fix naming to fit google style

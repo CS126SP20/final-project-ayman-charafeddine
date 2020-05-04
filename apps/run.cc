@@ -25,6 +25,6 @@ void SetUp(App::Settings* settings) {
 
 
 // This is a macro that runs the application.
-CINDER_APP(gui::CardTableApp,
+CINDER_APP(likha::gui::CardTableApp,
            RendererGl(RendererGl::Options().msaa(gui::kSamples)),
            gui::SetUp)
