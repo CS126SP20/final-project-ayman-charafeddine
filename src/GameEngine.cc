@@ -26,6 +26,7 @@ GameEngine::GameEngine() {
   current_player_index_ = 0;
   last_card_was_valid_ = false;
   current_suit_ = Suit::kNumSuits;
+  player_cards_eaten_ = vector<vector<Card>> (4, vector<Card> ());
 }
 
 
@@ -138,7 +139,7 @@ bool GameEngine::MustPlayLikha() {
 
   if (current_suit_ == Suit::Spades || current_suit_ == Suit::Diamonds) {
     for (const auto& card : current_trick_) {
-      if (card.EatsLikha(current_suit_) && HasLikhaOfSuit(current_suit_)) {
+      if (card.EatsLikhaOfCurrentSuit(current_suit_) && HasLikhaOfSuit(current_suit_)) {
         return true; //One of the cards played are higher than likha, so player must get rid of it
       }
     }
@@ -179,11 +180,11 @@ size_t GameEngine::GetCurrentTrickEaterIndex() {
   Card highest_card(current_suit_, Rank::Two); //lowest possible card that can eat the trick
   size_t eater_index_;
   size_t opening_player_index_ = (current_player_index_ + 1) % kNumPlayers; //Index of player who opened the trick
-  for (size_t i = opening_player_index_; i < kNumPlayers; i = (i + 1) % kNumPlayers) {
-    if (current_trick_[i].GetSuit() == current_suit_
-    && current_trick_[i].GetRank() >= highest_card.GetRank()) {
-      eater_index_ = i;
-      highest_card = current_trick_[i];
+  for (size_t i = opening_player_index_; i < kNumPlayers; i++) {
+    if (current_trick_[i % kNumPlayers].GetSuit() == current_suit_
+    && current_trick_[i % kNumPlayers].GetRank() >= highest_card.GetRank()) {
+      eater_index_ = i % kNumPlayers;
+      highest_card = current_trick_[i % kNumPlayers];
     }
   }
   return eater_index_;

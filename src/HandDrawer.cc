@@ -6,6 +6,7 @@
 #include <cinder/gl/gl.h>
 #include <cinder/ImageIo.h>
 #include "likha/HandDrawer.h"
+#include "../apps/CardTableApp.h"
 
 namespace likha {
 
@@ -49,6 +50,19 @@ bool HandDrawer::DealingComplete() {
     }
   }
   return true;
+}
+
+void HandDrawer::RemoveCard(size_t player_index_, size_t card_index_) {
+  if (player_index_ == kHumanPlayerIndex) {
+    card_drawers_[player_index_][card_index_] = CardDrawer();
+  } else {
+    for (auto& drawer_ : card_drawers_[player_index_]) {
+      if (drawer_.Draws()) {
+        drawer_ = CardDrawer();
+        return;
+      }
+    }
+  }
 }
 
 }

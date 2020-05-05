@@ -40,8 +40,6 @@ class CardTableApp : public cinder::app::App {
   ~CardTableApp() override;
 
  private:
-  static cinder::vec2 GetPositionFromPlayerIndex(size_t player_index_);
-
   GameState state_;
   HandDrawer dealer_;
   vector<Card> hand_;
@@ -49,6 +47,7 @@ class CardTableApp : public cinder::app::App {
   vector<PlayerStrategy*> strategies_;
   vector<Card> current_trick_;
   vector<CardDrawer> current_trick_drawers_;
+  std::chrono::time_point<std::chrono::system_clock> time_since_card_played;
 };
 
 }  // namespace gui

@@ -68,6 +68,8 @@ void CardDrawer::UpdateAndDraw(double elapsed_seconds_) {
 bool CardDrawer::ReachedEndPosition() {
   return current_position_ == ending_position_;
 }
-
+bool CardDrawer::Draws() {
+  return should_draw_;
+}
 
 }

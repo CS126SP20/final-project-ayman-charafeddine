@@ -56,11 +56,11 @@ bool Card::IsLikha() const {
   || (suit == Suit::Diamonds && rank == Rank::Ten);
 }
 
-bool Card::EatsLikha(Suit current_suit_) const {
-  if (current_suit_ == Suit::Spades) {
+bool Card::EatsLikhaOfCurrentSuit(Suit required_suit_) const {
+  if (required_suit_ == Suit::Spades) {
     return rank > kSpadeLikha.rank;
   }
-  if (current_suit_ == Suit::Diamonds) {
+  if (required_suit_ == Suit::Diamonds) {
     return rank > kDiamondLikha.rank;
   }
   return false;
@@ -72,7 +72,4 @@ string Card::GetCardImagePath() const {
   return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit_string_ + "-" + rank_string_ + ".png";
 }
 
-bool Card::HasCardBeenDrawn() {
-  return card_drawn_;
-}
 } //namespace likha

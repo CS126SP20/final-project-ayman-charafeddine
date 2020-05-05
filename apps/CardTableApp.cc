@@ -30,7 +30,7 @@ CardTableApp::CardTableApp() {
   state_ = GameState::Dealing;
   game_engine_ = GameEngine();
   current_trick_ = {};
-  current_trick_drawers_ = vector<CardDrawer> (4);
+  current_trick_drawers_ = vector<CardDrawer>(4);
 }
 
 void CardTableApp::setup() {
@@ -39,7 +39,7 @@ void CardTableApp::setup() {
   ImGui::Initialize();
 
   for (size_t i = 0; i < kNumPlayers - 1; i++) {
-    PlayerStrategy* strategy = new BasicPlayerStrategy();
+    PlayerStrategy *strategy = new BasicPlayerStrategy();
     strategies_.push_back(strategy);
   }
 
@@ -55,35 +55,42 @@ void CardTableApp::setup() {
 }
 
 void CardTableApp::update() {
+  const auto time = std::chrono::system_clock::now();
 
-  if (dealer_.DealingComplete() && current_trick_.empty()) {
-    state_ = GameState::TrickTaking;
+  //For beginning of the game
+  if (!dealer_.DealingComplete()) {
+    return;
   }
 
-  if (current_trick_drawers_[game_engine_.GetCurrentPlayerIndex() -1].ReachedEndPosition()) {
-    state_ = GameState::TrickTaking;
+  if (current_trick_.size() == kNumPlayers
+      && current_trick_drawers_[game_engine_.GetCurrentPlayerIndex()].ReachedEndPosition()) {
+    current_trick_.clear();
+    current_trick_drawers_ = vector<CardDrawer>(kNumPlayers); //empty drawers
   }
 
-  if (state_ == GameState::TrickTaking) {
-    if (game_engine_.GetCurrentPlayerIndex() != kHumanPlayerIndex) {
-      PlayerStrategy* current_strategy_ = strategies_[game_engine_.GetCurrentPlayerIndex()];
-      //Get card from strategy
-      Card card_to_play_ = current_strategy_->playCard(current_trick_);
-      //Keep trying while game engine says it's not a valid card to play
-      while (!game_engine_.HandleAndValidateCard(card_to_play_)) {
-        current_strategy_->receiveMoveValidation(false);
-        card_to_play_ = current_strategy_->playCard(current_trick_);
-      }
-      //Once the card chosen by strategy is valid, tell them
-      current_strategy_->receiveMoveValidation(true);
-      //Add card to trick
-      current_trick_.push_back(card_to_play_);
-      current_trick_drawers_[game_engine_.GetCurrentPlayerIndex() - 1] =
-          CardDrawer(GetPositionFromPlayerIndex(game_engine_.GetCurrentPlayerIndex() - 1),
-              kCardThrowingEndPositions[game_engine_.GetCurrentPlayerIndex() -1],
-              card_to_play_);
-      state_ = GameState::DrawingCardPlayed;
-      }
+  if (game_engine_.GetCurrentPlayerIndex() != kHumanPlayerIndex) {
+    if (time < time_since_card_played + std::chrono::milliseconds(500)) {
+      return;
+    }
+    PlayerStrategy *current_strategy_ = strategies_[game_engine_.GetCurrentPlayerIndex()];
+    //Get card from strategy
+    Card card_to_play_ = current_strategy_->playCard(current_trick_);
+    //Keep trying while game engine says it's not a valid card to play
+    while (!game_engine_.HandleAndValidateCard(card_to_play_)) {
+      current_strategy_->receiveMoveValidation(false);
+      card_to_play_ = current_strategy_->playCard(current_trick_);
+    }
+    //Once the card chosen by strategy is valid, tell them
+    current_strategy_->receiveMoveValidation(true);
+    //Add card to trick
+    current_trick_.push_back(card_to_play_);
+    current_trick_drawers_[game_engine_.GetCurrentPlayerIndex() - 1] =
+        CardDrawer(kPlayerPositions[game_engine_.GetCurrentPlayerIndex() - 1],
+                   kCardThrowingEndPositions[game_engine_.GetCurrentPlayerIndex() - 1],
+                   card_to_play_);
+    time_since_card_played = time;
+    //Remove card from hand
+    dealer_.RemoveCard(game_engine_.GetCurrentPlayerIndex() - 1, 0);
   }
 }
 
@@ -102,32 +109,29 @@ void CardTableApp::draw() {
 void CardTableApp::keyDown(KeyEvent event) {}
 
 CardTableApp::~CardTableApp() {
-  for (const auto& strategy : strategies_) {
+  for (const auto &strategy : strategies_) {
     delete strategy;
-  }
-}
-
-cinder::vec2 CardTableApp::GetPositionFromPlayerIndex(size_t player_index) {
-  if (player_index == 0) {
-    return kFirstCardLeftPlayer;
-  } else if (player_index == 1) {
-    return kFirstCardTopPlayer;
-  } else if (player_index == 2) {
-    return kFirstCardRightPlayer;
-  } else if (player_index == 3) {
-    return kFirstCardBottomPlayer;
   }
 }
 
 void CardTableApp::mouseDown(cinder::app::MouseEvent event) {
   if (game_engine_.GetCurrentPlayerIndex() == kHumanPlayerIndex) {
     if (event.isLeftDown() && user_hand_rect_.contains(event.getPos())) {
-      if (event.getX() > 600 && event.getX() < 675) {
-        current_trick_drawers_[kHumanPlayerIndex] = CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], hand_[0]);
+      Card card_to_play_{Suit::kNumSuits, Rank::kNumRanks};//random card to replace
+      size_t card_index_ = 0;
+      if (event.getX() > kFirstCardBottomPlayer.x
+          && event.getX() < kFirstCardBottomPlayer.x + 2 * kCardImageHalfWidth) {
+        card_index_ = 0;
       } else {
-        int card_index_ = (int) (-event.getX() + 150) / 37 + 12;
+        card_index_ = (size_t) ((-event.getX() + 150) / 37 + 12);
+      }
+      card_to_play_ = hand_[card_index_];
+      if (game_engine_.HandleAndValidateCard(card_to_play_)) {
+        current_trick_.push_back(card_to_play_);
         current_trick_drawers_[kHumanPlayerIndex] =
-            CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], hand_[card_index_]);
+            CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], card_to_play_);
+        state_ = GameState::DrawingCardPlayed;
+        dealer_.RemoveCard(kHumanPlayerIndex, card_index_);
       }
     }
   }

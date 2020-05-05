@@ -42,6 +42,10 @@ class CardDrawer {
    */
   bool ReachedEndPosition();
 
+  /**
+   * Whether the drawer draws anything
+   */
+   bool Draws();
 
  private:
   vec2 starting_position_;

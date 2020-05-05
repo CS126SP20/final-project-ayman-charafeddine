@@ -31,7 +31,7 @@ Card BasicPlayerStrategy::playCard(vector<Card> cardsPlayed) {
 }
 void BasicPlayerStrategy::receiveMoveValidation(bool isValid) {
   if (!isValid) {
-    card_index_to_try_++;
+    card_index_to_try_ = (card_index_to_try_ + 1) % my_hand_.size();
   }
 }
 void BasicPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {

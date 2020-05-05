@@ -12,7 +12,6 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
 
-
 namespace likha {
 
 using std::string;
@@ -28,7 +27,8 @@ static constexpr size_t kNoValue = 0;
 
 static const vector<string> suits = {"diamonds", "hearts", "spades", "clubs"};
 static const vector<string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
-static const string kCardBackImagePath = "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png";
+static const string
+    kCardBackImagePath = "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png";
 
 static constexpr float kCardImageHalfWidth = 37.5f;
 static constexpr float kCardImageHalfLength = 53.5f;
@@ -65,24 +65,41 @@ class Card {
   };
 
   Card(Suit set_suit, Rank set_rank);
-  size_t GetPointValue() const;
+
   Suit GetSuit() const;
+
   Rank GetRank() const;
 
-  bool operator==(const Card& rhs) const;
+  /**
+ * Get card's point value. 1 for all hearts, 13 for Q of Spades, 10 for 10 of Diamonds.
+ * @return point value
+ */
+  size_t GetPointValue() const;
 
+  /**
+   * Return true if rank and suit are the same.
+   */
+  bool operator==(const Card &rhs) const;
+
+  /**
+   * Return true if card is Q of Spades or 10 of Diamonds.
+   */
   bool IsLikha() const;
-  bool EatsLikha(Suit current_suit_) const;
 
+  /**
+   * Return true if card is of required_suit_ and higher rank than the likha of that suit.
+   * @param required_suit_ : The suit that is required to eat the current trick.
+   */
+  bool EatsLikhaOfCurrentSuit(Suit required_suit_) const;
+
+  /**
+   * Get the file path of the image corresponding to the card.
+   */
   string GetCardImagePath() const;
-  bool HasCardBeenDrawn();
 
  private:
   Suit suit;
   Rank rank;
-  bool card_drawn_;
-  float card_current_x_position_;
-  float card_current_y_position_;
 
 };
 
