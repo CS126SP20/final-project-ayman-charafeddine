@@ -33,10 +33,10 @@ void CardDrawer::UpdateAndDraw(double elapsed_seconds_) {
     } else {
 
       //If card is really close to end position, just take it there
-      if (current_position_.x - ending_position_.x < std::abs(kCardPathDelta)) {
+      if (std::abs(current_position_.x - ending_position_.x) < kCardPathDelta) {
         current_position_.x = ending_position_.x;
       }
-      if (current_position_.y - ending_position_.y < std::abs(kCardPathDelta)) {
+      if (std::abs(current_position_.y - ending_position_.y) < kCardPathDelta) {
         current_position_.y = ending_position_.y;
       }
 

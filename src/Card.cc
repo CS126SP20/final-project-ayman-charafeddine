@@ -18,9 +18,6 @@ const Card kSpadeLikha = Card (Card::Suit::Spades, Card::Rank::Queen);
 Card::Card(Card::Suit set_suit, Card::Rank set_rank) {
   suit = set_suit;
   rank = set_rank;
-  card_drawn_ = false;
-  card_current_x_position_ = kCardPathLength;
-  card_current_y_position_ = 900;
 }
 
 size_t Card::GetPointValue() const {

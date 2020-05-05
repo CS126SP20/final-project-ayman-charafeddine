@@ -192,5 +192,8 @@ size_t GameEngine::GetCurrentTrickEaterIndex() {
 bool GameEngine::TrickIsOngoing() {
   return !current_trick_.empty();
 }
+vector<Card> GameEngine::GetCurrentTrick() {
+  return current_trick_;
+}
 
 }

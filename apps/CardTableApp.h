@@ -45,7 +45,6 @@ class CardTableApp : public cinder::app::App {
   vector<Card> hand_;
   GameEngine game_engine_;
   vector<PlayerStrategy*> strategies_;
-  vector<Card> current_trick_;
   vector<CardDrawer> current_trick_drawers_;
   std::chrono::time_point<std::chrono::system_clock> time_since_card_played;
 };

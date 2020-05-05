@@ -44,6 +44,7 @@ class GameEngine {
 
   size_t GetCurrentPlayerIndex();
   vector<vector<Card>> DealCards(Deck deck_);
+  vector<Card> GetCurrentTrick();
   void SetUp();
   void RunGame();
   bool HandleAndValidateCard(Card card);
