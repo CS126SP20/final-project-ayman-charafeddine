@@ -13,6 +13,8 @@
 #include <cinder/CinderImGui.h>
 #include <likha/BasicPlayerStrategy.h>
 
+#include <cmath>
+
 namespace likha {
 
 namespace gui {
@@ -114,6 +116,20 @@ cinder::vec2 CardTableApp::GetPositionFromPlayerIndex(size_t player_index) {
     return kFirstCardRightPlayer;
   } else if (player_index == 3) {
     return kFirstCardBottomPlayer;
+  }
+}
+
+void CardTableApp::mouseDown(cinder::app::MouseEvent event) {
+  if (game_engine_.GetCurrentPlayerIndex() == kHumanPlayerIndex) {
+    if (event.isLeftDown() && user_hand_rect_.contains(event.getPos())) {
+      if (event.getX() > 600 && event.getX() < 675) {
+        current_trick_drawers_[kHumanPlayerIndex] = CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], hand_[0]);
+      } else {
+        int card_index_ = (int) (-event.getX() + 150) / 37 + 12;
+        current_trick_drawers_[kHumanPlayerIndex] =
+            CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], hand_[card_index_]);
+      }
+    }
   }
 }
 

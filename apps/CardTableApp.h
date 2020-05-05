@@ -15,7 +15,10 @@ namespace gui {
 static constexpr size_t kHumanPlayerIndex = 3;
 static const vector<cinder::vec2> kCardThrowingEndPositions = {{320, 400}, {400, 320},
                                                                {480, 400}, {400, 480}};
-
+static const cinder::Rectf user_hand_rect_ = {150,
+                                                    kFirstCardBottomPlayer.y,
+                                                    660,
+                                                    800};
 
 enum class GameState {
   SetUp,
@@ -33,6 +36,7 @@ class CardTableApp : public cinder::app::App {
   void update() override;
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
+  void mouseDown(cinder::app::MouseEvent event) override;
   ~CardTableApp() override;
 
  private:

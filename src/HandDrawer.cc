@@ -25,7 +25,7 @@ HandDrawer::HandDrawer(vector<Card> hand_) {
     card_drawers_[2].push_back(right_card_);
   }
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
-    CardDrawer user_card_(kCenter, {kFirstCardBottomPlayer.x + kCardImageHalfWidth * i, kFirstCardBottomPlayer.y}, hand_[i]);
+    CardDrawer user_card_(kCenter, {kFirstCardBottomPlayer.x - kCardImageHalfWidth * i, kFirstCardBottomPlayer.y}, hand_[i]);
     card_drawers_[3].push_back(user_card_);
   }
 }

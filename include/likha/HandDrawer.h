@@ -17,7 +17,7 @@ static const cinder::vec2 kCenter = {400, 400};
 static const cinder::vec2 kFirstCardLeftPlayer = {0, 150};
 static const cinder::vec2 kFirstCardTopPlayer = {150, 0};
 static const cinder::vec2 kFirstCardRightPlayer = {800 - kCardImageHalfWidth * 2, 150};
-static const cinder::vec2 kFirstCardBottomPlayer = {150, 800 - kCardImageHalfLength * 2};
+static const cinder::vec2 kFirstCardBottomPlayer = {600, 800 - kCardImageHalfLength * 2};
 
 class HandDrawer {
  public:
