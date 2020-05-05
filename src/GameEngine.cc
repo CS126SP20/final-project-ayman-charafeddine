@@ -57,6 +57,9 @@ void GameEngine::GiftCards() {
 
 bool GameEngine::HandleAndValidateCard(Card card) {
   if (isValidCard(card)) {
+    if (current_trick_.empty()) {
+      current_suit_ = card.GetSuit();
+    }
     vector<Card>& current_hand_ = player_hands_[current_player_index_];
     //Remove card from player Hand
     current_hand_.erase(std::remove(current_hand_.begin(), current_hand_.end(), card),
@@ -89,6 +92,7 @@ bool GameEngine::isValidCard(Card card) {
     //Player does not have that card, card is invalid
     return false;
   }
+
   if (current_trick_.empty()) {
     //First player in trick can play any card he has
     return true;
