@@ -47,6 +47,7 @@ class GameEngine {
   void SetUp();
   void RunGame();
   bool HandleAndValidateCard(Card card);
+  bool TrickIsOngoing();
 
   bool MustPlayLikha();
   bool HasSuit(Card::Suit suit);

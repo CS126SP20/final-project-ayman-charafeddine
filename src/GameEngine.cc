@@ -72,11 +72,13 @@ bool GameEngine::HandleAndValidateCard(Card card) {
       }
       //Current trick eater should open the new trick
       current_player_index_ = trick_eater_index_;
+    } else {
+      //Trick isn't over, go to next player
+      current_player_index_ = (current_player_index_ + 1) % kNumPlayers;
     }
     return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 
@@ -181,6 +183,9 @@ size_t GameEngine::GetCurrentTrickEaterIndex() {
     }
   }
   return eater_index_;
+}
+bool GameEngine::TrickIsOngoing() {
+  return !current_trick_.empty();
 }
 
 }

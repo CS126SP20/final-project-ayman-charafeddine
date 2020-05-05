@@ -5,7 +5,7 @@
 #include <cinder/gl/draw.h>
 #include <cinder/gl/gl.h>
 #include <cinder/ImageIo.h>
-#include "Dealer.h"
+#include "likha/HandDrawer.h"
 
 namespace likha {
 
@@ -14,7 +14,7 @@ namespace gui {
 using cinder::loadImage;
 using cinder::Color;
 
-Dealer::Dealer(vector<Card> hand_) {
+HandDrawer::HandDrawer(vector<Card> hand_) {
   card_drawers_ = vector<vector<CardDrawer>> (4, vector<CardDrawer>());
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
     CardDrawer left_card_(kCenter,{kFirstCardLeftPlayer.x, kFirstCardLeftPlayer.y + kCardImageHalfWidth * i});
@@ -30,9 +30,9 @@ Dealer::Dealer(vector<Card> hand_) {
   }
 }
 
-Dealer::Dealer() = default;
+HandDrawer::HandDrawer() = default;
 
-void Dealer::Update(double new_elapsed_seconds_) {
+void HandDrawer::UpdateAndDraw(double new_elapsed_seconds_) {
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
     for (size_t j = 0; j < kNumPlayers; j++) {
       card_drawers_[j][i].UpdateAndDraw(new_elapsed_seconds_);
@@ -40,7 +40,7 @@ void Dealer::Update(double new_elapsed_seconds_) {
   }
 }
 
-bool Dealer::DealingComplete() {
+bool HandDrawer::DealingComplete() {
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
     for (size_t j = 0; j < kNumPlayers; j++) {
       if (!card_drawers_[j][i].ReachedEndPosition()) {

@@ -2,8 +2,8 @@
 // Created by ayman on 4/29/20.
 //
 
-#ifndef FINALPROJECT_APPS_DEALER_H_
-#define FINALPROJECT_APPS_DEALER_H_
+#ifndef FINALPROJECT_INCLUDE_LIKHA_HANDDRAWER_H_
+#define FINALPROJECT_INCLUDE_LIKHA_HANDDRAWER_H_
 
 #include <likha/GameEngine.h>
 #include <cinder/gl/Texture.h>
@@ -19,14 +19,13 @@ static const cinder::vec2 kFirstCardTopPlayer = {150, 0};
 static const cinder::vec2 kFirstCardRightPlayer = {800 - kCardImageHalfWidth * 2, 150};
 static const cinder::vec2 kFirstCardBottomPlayer = {150, 800 - kCardImageHalfLength * 2};
 
-class Dealer {
+class HandDrawer {
  public:
-  Dealer(vector<Card> hand_);
-  Dealer();
-  void Update(double new_elapsed_seconds_);
+  HandDrawer(vector<Card> hand_);
+  HandDrawer();
+  void UpdateAndDraw(double new_elapsed_seconds_);
   bool DealingComplete();
  private:
-  size_t cards_dealt_;
   vector<vector<CardDrawer>> card_drawers_;
 
 };
@@ -34,4 +33,4 @@ class Dealer {
 }
 
 }
-#endif //FINALPROJECT_APPS_DEALER_H_
+#endif //FINALPROJECT_INCLUDE_LIKHA_HANDDRAWER_H_

@@ -34,7 +34,7 @@ static constexpr float kCardImageHalfWidth = 37.5f;
 static constexpr float kCardImageHalfLength = 53.5f;
 static constexpr double kCardRotationSpeed = 10.0;
 static constexpr float kCardPathLength = 250.0f;
-static constexpr float kCardPathDelta = 10.0f;
+static constexpr float kCardPathDelta = 8.0f;
 
 class Card {
 
@@ -75,7 +75,6 @@ class Card {
   bool EatsLikha(Suit current_suit_) const;
 
   string GetCardImagePath() const;
-  void DrawCardPlayed(size_t current_index_, cinder::vec2 center_, double elapsed_seconds_);
   bool HasCardBeenDrawn();
 
  private:

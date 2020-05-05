@@ -6,14 +6,16 @@
 #include <cinder/app/App.h>
 #include <cinder/gl/Texture.h>
 #include <likha/PlayerStartegy.h>
-#include "Dealer.h"
+#include "likha/HandDrawer.h"
 
 namespace likha {
 
 namespace gui {
 
-static constexpr float kBottomOfWindow = 780.0f;
 static constexpr size_t kHumanPlayerIndex = 3;
+static const vector<cinder::vec2> kCardThrowingEndPositions = {{320, 400}, {400, 320},
+                                                               {480, 400}, {400, 480}};
+
 
 enum class GameState {
   SetUp,
@@ -31,18 +33,18 @@ class CardTableApp : public cinder::app::App {
   void update() override;
   void draw() override;
   void keyDown(cinder::app::KeyEvent) override;
-
   ~CardTableApp() override;
+
  private:
+  static cinder::vec2 GetPositionFromPlayerIndex(size_t player_index_);
+
   GameState state_;
-  Dealer dealer_;
+  HandDrawer dealer_;
   vector<Card> hand_;
-  void DrawHand();
   GameEngine game_engine_;
   vector<PlayerStrategy*> strategies_;
   vector<Card> current_trick_;
-  size_t current_player_index_;
-  size_t current_trick_index_;
+  vector<CardDrawer> current_trick_drawers_;
 };
 
 }  // namespace gui

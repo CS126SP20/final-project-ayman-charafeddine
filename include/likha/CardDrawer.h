@@ -17,18 +17,26 @@ using cinder::vec2;
 class CardDrawer {
  public:
   /**
+   * Default constructor, creates an object that doesn't draw anything.
+   */
+  CardDrawer();
+
+  /**
    * Construct a CardDrawer for a specific card to be used for card throwing.
    */
   CardDrawer(const vec2& start_position_, const vec2& end_position_, Card card);
+
   /**
    * Construct a CardDrawer for the back of the cards to be used for card dealing.
    */
   CardDrawer(const vec2& start_position_, const vec2& end_position_);
+
   /**
-   * Update appropriate fields and draw the card.
+   * UpdateAndDraw appropriate fields and draw the card.
    * @param elapsed_seconds_  elapsed seconds in app, used to rotate.
    */
   void UpdateAndDraw(double elapsed_seconds_);
+
   /**
    * Whether the card reached its end position. Used to know if next player should play.
    */
@@ -40,6 +48,7 @@ class CardDrawer {
   vec2 ending_position_;
   cinder::gl::TextureRef card_texture_;
   vec2 current_position_;
+  bool should_draw_;
 
 };
 }

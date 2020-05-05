@@ -72,28 +72,6 @@ string Card::GetCardImagePath() const {
   return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit_string_ + "-" + rank_string_ + ".png";
 }
 
-void Card::DrawCardPlayed(size_t current_index_, cinder::vec2 center_, double elapsed_seconds_) {
-
-  if (card_current_x_position_ > 0) {
-    card_current_x_position_ -= kCardPathDelta;
-  } else {
-    card_drawn_ = true;
-  }
-
-  cinder::gl::TextureRef card_texture_ = cinder::gl::Texture::create(loadImage(GetCardImagePath()));
-
-  cinder::gl::pushModelView();
-  cinder::gl::translate(center_.x - card_current_x_position_ , center_.y);
-  cinder::gl::rotate(float(elapsed_seconds_ * kCardRotationSpeed));
-  cinder::gl::translate(-kCardImageHalfWidth, -kCardImageHalfLength);
-  cinder::gl::draw(card_texture_);
-  cinder::gl::popModelView();
-
-  if (card_current_x_position_ <= 0) {
-    cinder::gl::draw(card_texture_, center_);
-  }
-
-}
 bool Card::HasCardBeenDrawn() {
   return card_drawn_;
 }
