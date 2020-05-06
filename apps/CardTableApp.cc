@@ -30,6 +30,7 @@ CardTableApp::CardTableApp() {
   state_ = GameState::Dealing;
   game_engine_ = GameEngine();
   current_trick_drawers_ = vector<CardDrawer>(4);
+  trick_discarding_drawers_ = vector<CardDrawer>(4);
 }
 
 void CardTableApp::setup() {
@@ -55,41 +56,52 @@ void CardTableApp::setup() {
 
 void CardTableApp::update() {
   const auto time = std::chrono::system_clock::now();
+  vector<Card> current_trick_ = game_engine_.GetCurrentTrick();
+  size_t current_player_index_ = game_engine_.GetCurrentPlayerIndex();
 
   //For beginning of the game
   if (!dealer_.DealingComplete()) {
     return;
   }
 
-  if (game_engine_.GetCurrentTrick().size() == kNumPlayers)
-//      && current_trick_drawers_[game_engine_.GetCurrentPlayerIndex()].ReachedEndPosition())
-      {
-    current_trick_drawers_ = vector<CardDrawer>(kNumPlayers); //empty drawers
+  if (time < time_since_card_played + std::chrono::milliseconds(800)) {
+    return;
   }
 
-  if (game_engine_.GetCurrentPlayerIndex() != kHumanPlayerIndex) {
-    if (time < time_since_card_played + std::chrono::milliseconds(500)) {
-      return;
+  if (current_trick_.size() == kNumPlayers && current_trick_drawers_[current_player_index_].ReachedEndPosition()
+      && game_engine_.GetCurrentSuit() != Suit::kNumSuits) { //kNumSuits is the current suit at construction of game engine,
+    // so this runs as long as a player has played
+    for (size_t i = 0; i < kNumPlayers; i++) {
+      trick_discarding_drawers_[i] = CardDrawer(kCardThrowingEndPositions[i],
+                                                kOutsideOfWindowPositions[game_engine_.GetCurrentTrickEaterIndex()],
+                                                current_trick_[i], false);
     }
-    PlayerStrategy *current_strategy_ = strategies_[game_engine_.GetCurrentPlayerIndex()];
+    //empty trick drawers
+    current_trick_drawers_ = vector<CardDrawer>(kNumPlayers);
+    //tell game engine that trick has ended
+    game_engine_.HandleEndOfTrick();
+  }
+
+  if (current_player_index_ != kHumanPlayerIndex) {
+    PlayerStrategy *current_strategy_ = strategies_[current_player_index_];
     //Get card from strategy
     Card card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick());
     //Keep trying while game engine says it's not a valid card to play
-    while (!game_engine_.HandleAndValidateCard(card_to_play_)) {
+    while (!game_engine_.isValidCard(card_to_play_)) {
       current_strategy_->receiveMoveValidation(false);
       card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick());
     }
     //Once the card chosen by strategy is valid, tell them
     current_strategy_->receiveMoveValidation(true);
     //Draw card being thrown
-    current_trick_drawers_[game_engine_.GetCurrentPlayerIndex() - 1] =
-        CardDrawer(kPlayerPositions[game_engine_.GetCurrentPlayerIndex() - 1],
-                   kCardThrowingEndPositions[game_engine_.GetCurrentPlayerIndex() - 1],
-                   card_to_play_);
+    current_trick_drawers_[current_player_index_] =
+        CardDrawer(kPlayerPositions[current_player_index_],
+                   kCardThrowingEndPositions[current_player_index_], card_to_play_, true);
     //Update time since last card was played
     time_since_card_played = time;
     //Remove card from hand
-    dealer_.RemoveCard(game_engine_.GetCurrentPlayerIndex() - 1, 0);
+    dealer_.RemoveCard(current_player_index_, 0);
+    game_engine_.HandleCard(card_to_play_);
   }
 }
 
@@ -100,6 +112,9 @@ void CardTableApp::draw() {
 
   if (dealer_.DealingComplete()) {
     for (auto &drawer : current_trick_drawers_) {
+      drawer.UpdateAndDraw(getElapsedSeconds());
+    }
+    for (auto &drawer : trick_discarding_drawers_) {
       drawer.UpdateAndDraw(getElapsedSeconds());
     }
   }
@@ -118,7 +133,7 @@ void CardTableApp::mouseDown(cinder::app::MouseEvent event) {
   if (game_engine_.GetCurrentPlayerIndex() == kHumanPlayerIndex
       && event.isLeftDown()
       && user_hand_rect_.contains(event.getPos())) {
-    //Always invalid card
+    //Initialize card as an invalid one
     Card card_to_play_{Suit::kNumSuits, Rank::kNumRanks};
     size_t card_index_ = 0;
     //Exception case for first card to the right because the full card is showing
@@ -130,12 +145,13 @@ void CardTableApp::mouseDown(cinder::app::MouseEvent event) {
       card_index_ = (size_t) ((-event.getX() + 150) / 37 + 12);
     }
     card_to_play_ = hand_[card_index_];
-    if (game_engine_.HandleAndValidateCard(card_to_play_)) {
+    if (game_engine_.isValidCard(card_to_play_)) {
       //Draw card being thrown
       current_trick_drawers_[kHumanPlayerIndex] =
-          CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], card_to_play_);
-      state_ = GameState::DrawingCardPlayed;
+          CardDrawer(kFirstCardBottomPlayer, kCardThrowingEndPositions[kHumanPlayerIndex], card_to_play_, true);
       dealer_.RemoveCard(kHumanPlayerIndex, card_index_);
+      //Don't delete card from hand_, in case user clicks in the card's former spot.
+      game_engine_.HandleCard(card_to_play_);
     }
   }
 

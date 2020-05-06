@@ -11,19 +11,20 @@ CardDrawer::CardDrawer() {
   should_draw_ = false;
 }
 
-CardDrawer::CardDrawer(const cinder::vec2& start_position_, const cinder::vec2& end_position_, likha::Card card) {
+CardDrawer::CardDrawer(const vec2 &start_position_, const vec2 &end_position_, Card card, bool rotate_) {
   should_draw_ = true;
   current_position_ = start_position_;
   ending_position_ = end_position_;
   card_texture_ = cinder::gl::Texture::create(loadImage(card.GetCardImagePath()));
-
+  should_rotate_ = rotate_;
 }
 
-CardDrawer::CardDrawer(const cinder::vec2& start_position_, const cinder::vec2& end_position_) {
+CardDrawer::CardDrawer(const vec2 &start_position_, const vec2 &end_position_, bool rotate_) {
   should_draw_ = true;
   current_position_ = start_position_;
   ending_position_ = end_position_;
   card_texture_ = cinder::gl::Texture::create(loadImage(kCardBackImagePath));
+  should_rotate_ = rotate_;
 }
 
 void CardDrawer::UpdateAndDraw(double elapsed_seconds_) {
@@ -56,7 +57,9 @@ void CardDrawer::UpdateAndDraw(double elapsed_seconds_) {
       //Translate to the new current position
       cinder::gl::translate(current_position_);
       //Rotate
-      cinder::gl::rotate(float(elapsed_seconds_ * kCardRotationSpeed));
+      if (should_rotate_) {
+        cinder::gl::rotate(float(elapsed_seconds_ * kCardRotationSpeed));
+      }
       //Translate so that rotation is around the middle of the card
       cinder::gl::translate(-kCardImageHalfWidth, -kCardImageHalfLength);
       cinder::gl::draw(card_texture_);

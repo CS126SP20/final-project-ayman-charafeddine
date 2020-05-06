@@ -15,10 +15,9 @@ namespace gui {
 static constexpr size_t kHumanPlayerIndex = 3;
 static const vector<cinder::vec2> kCardThrowingEndPositions = {{320, 400}, {400, 320},
                                                                {480, 400}, {400, 480}};
-static const cinder::Rectf user_hand_rect_ = {150,
-                                                    kFirstCardBottomPlayer.y,
-                                                    660,
-                                                    800};
+static const cinder::Rectf user_hand_rect_ = {150, kFirstCardBottomPlayer.y,660,800};
+static const vector<cinder::vec2> kOutsideOfWindowPositions = {{- 200, 400}, {400, -200},
+                                                               {1000, 400}, {400, 1000}};
 
 enum class GameState {
   SetUp,
@@ -47,6 +46,8 @@ class CardTableApp : public cinder::app::App {
   vector<PlayerStrategy*> strategies_;
   vector<CardDrawer> current_trick_drawers_;
   std::chrono::time_point<std::chrono::system_clock> time_since_card_played;
+  vector<CardDrawer> trick_discarding_drawers_;
+
 };
 
 }  // namespace gui

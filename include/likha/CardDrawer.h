@@ -24,12 +24,12 @@ class CardDrawer {
   /**
    * Construct a CardDrawer for a specific card to be used for card throwing.
    */
-  CardDrawer(const vec2& start_position_, const vec2& end_position_, Card card);
+  CardDrawer(const vec2 &start_position_, const vec2 &end_position_, Card card, bool rotate_);
 
   /**
    * Construct a CardDrawer for the back of the cards to be used for card dealing.
    */
-  CardDrawer(const vec2& start_position_, const vec2& end_position_);
+  CardDrawer(const vec2 &start_position_, const vec2 &end_position_, bool rotate_);
 
   /**
    * UpdateAndDraw appropriate fields and draw the card.
@@ -53,6 +53,7 @@ class CardDrawer {
   cinder::gl::TextureRef card_texture_;
   vec2 current_position_;
   bool should_draw_;
+  bool should_rotate_;
 
 };
 }

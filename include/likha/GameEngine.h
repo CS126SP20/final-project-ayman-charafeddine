@@ -24,7 +24,6 @@ class GameEngine {
     size_t team_;
   };
 
-  bool isValidCard(Card card);
   void addUpScores();
 
   size_t current_player_index_;
@@ -47,7 +46,7 @@ class GameEngine {
   vector<Card> GetCurrentTrick();
   void SetUp();
   void RunGame();
-  bool HandleAndValidateCard(Card card);
+  void HandleCard(Card card);
   bool TrickIsOngoing();
 
   bool MustPlayLikha();
@@ -55,6 +54,9 @@ class GameEngine {
   static bool vecContainsCard(Card card, vector<Card> cards);
   bool HasLikhaOfSuit(Card::Suit suit_);
   size_t GetCurrentTrickEaterIndex();
+  Card::Suit GetCurrentSuit();
+  bool isValidCard(Card card);
+  void HandleEndOfTrick();
 };
 
 }
