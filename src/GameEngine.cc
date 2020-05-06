@@ -24,13 +24,8 @@ GameEngine::GameEngine() {
     players_.push_back(player);
   }
   current_player_index_ = 0;
-  last_card_was_valid_ = false;
-  current_suit_ = Suit::kNumSuits;
   player_cards_eaten_ = vector<vector<Card>>(4, vector<Card>());
-}
-
-void GameEngine::RunGame() {
-
+  trick_ = Trick(0); //First player is 0
 }
 
 vector<vector<Card>> GameEngine::DealCards(Deck deck_) {
@@ -44,27 +39,15 @@ vector<vector<Card>> GameEngine::DealCards(Deck deck_) {
   return player_hands_;
 }
 
-/*
-void GameEngine::GiftCards() {
-  for (auto position = PlayerPosition(0); position < PlayerPosition::kNumPlayers; ((int&) position)++) {
-    players_[((size_t) position)].strategy_ptr_->receiveGift( //receive gift from player to his left (ie. with next index)
-        players_[((size_t) position + 1) % (size_t) PlayerPosition ::kNumPlayers].strategy_ptr_->giftCards());
-  }
-}
- */
-
-
 void GameEngine::HandleCard(Card card) {
-  if (current_trick_.empty()) {
-    current_suit_ = card.GetSuit();
-  }
   vector<Card> &current_hand_ = player_hands_[current_player_index_];
   //Remove card from player Hand
   current_hand_.erase(std::remove(current_hand_.begin(), current_hand_.end(), card),
                       current_hand_.end());
   //Add card to current trick
-  current_trick_.push_back(card);
-  if (current_trick_.size() < kNumPlayers) {
+  trick_.AddCard(card);
+
+  if (!trick_.TrickFinished()) {
     //Trick isn't over, go to next player
     current_player_index_ = (current_player_index_ + 1) % kNumPlayers;
   }
@@ -78,25 +61,23 @@ bool GameEngine::isValidCard(Card card) {
     return false;
   }
 
-  if (current_trick_.empty()) {
+  if (trick_.GetCards().empty()) {
     //First player in trick can play any card he has
     return true;
   }
+
   if (MustPlayLikha() && !card.IsLikha()) {
     //Player is required to play the Likha but is trying to play a different card, card is invalid
     return false;
   }
-  if (HasSuit(current_suit_)) {
+  if (HasSuit(trick_.GetRequiredSuit())) {
     //Player has the required suit, must play it
-    return card.GetSuit() == current_suit_;
+    return card.GetSuit() == trick_.GetRequiredSuit();
   }
   //Player does not have the required suit, can play anything
   return true;
 }
 
-void GameEngine::SetUp() {
-
-}
 
 void GameEngine::addUpScores() {
   for (size_t player_index = 0; player_index < kNumPlayers; player_index++) {
@@ -117,13 +98,13 @@ bool GameEngine::MustPlayLikha() {
     return false; //Player doesn't have a likha
   }
 
-  if (!HasSuit(current_suit_)) {
+  if (!HasSuit(trick_.GetRequiredSuit())) {
     return true; //Player doesn't have the required suit, so player must get rid of likha
   }
 
-  if (current_suit_ == Suit::Spades || current_suit_ == Suit::Diamonds) {
-    for (const auto &card : current_trick_) {
-      if (card.EatsLikhaOfCurrentSuit(current_suit_) && HasLikhaOfSuit(current_suit_)) {
+  if (trick_.GetRequiredSuit() == Suit::Spades || trick_.GetRequiredSuit() == Suit::Diamonds) {
+    for (const auto &card : trick_.GetCards()) {
+      if (card.EatsLikhaOfCurrentSuit(trick_.GetRequiredSuit()) && HasLikhaOfSuit(trick_.GetRequiredSuit())) {
         return true; //One of the cards played are higher than likha, so player must get rid of it
       }
     }
@@ -160,36 +141,19 @@ bool GameEngine::HasLikhaOfSuit(Suit suit_) {
   return false;
 }
 
-size_t GameEngine::GetCurrentTrickEaterIndex() {
-  Card highest_card(current_suit_, Rank::Two); //lowest possible card that can eat the trick
-  size_t eater_index_;
-  size_t opening_player_index_ = (current_player_index_ + 1) % kNumPlayers; //Index of player who opened the trick
-  for (size_t i = opening_player_index_; i < kNumPlayers + opening_player_index_; i++) {
-    if (current_trick_[i % kNumPlayers].GetSuit() == current_suit_
-        && current_trick_[i % kNumPlayers].GetRank() >= highest_card.GetRank()) {
-      eater_index_ = i % kNumPlayers;
-      highest_card = current_trick_[i % kNumPlayers];
-    }
-  }
-  return eater_index_;
+Trick GameEngine::GetCurrentTrick() {
+  return trick_;
 }
-bool GameEngine::TrickIsOngoing() {
-  return !current_trick_.empty();
-}
-vector<Card> GameEngine::GetCurrentTrick() {
-  return current_trick_;
-}
-Card::Suit GameEngine::GetCurrentSuit() {
-  return current_suit_;
-}
+
+
 void GameEngine::HandleEndOfTrick() {
-  size_t trick_eater_index_ = GetCurrentTrickEaterIndex();
-  for (const auto &card_in_trick_ : current_trick_) {
+  size_t trick_eater_index_ = trick_.GetTrickEater();
+  for (const auto &card_in_trick_ : trick_.GetCards()) {
     player_cards_eaten_[trick_eater_index_].push_back(card_in_trick_);
   }
   //Current trick eater should open the new trick
   current_player_index_ = trick_eater_index_;
-  current_trick_.clear();
+  trick_ = Trick(current_player_index_);
 }
 
 }

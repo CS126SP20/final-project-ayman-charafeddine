@@ -8,7 +8,7 @@
 #include "Card.h"
 #include "Deck.h"
 #include "PlayerStartegy.h"
-
+#include "Trick.h"
 
 using std::vector;
 using std::string;
@@ -30,10 +30,7 @@ class GameEngine {
   vector<vector<Card>> player_hands_;
   vector<Player> players_;
   vector<vector<Card>> player_cards_eaten_;
-  bool last_card_was_valid_{};
-  Card::Suit current_suit_;
-  vector<Card> current_trick_;
-
+  Trick trick_ = Trick(0);
 
   // void GiftCards();
 
@@ -43,18 +40,13 @@ class GameEngine {
 
   size_t GetCurrentPlayerIndex();
   vector<vector<Card>> DealCards(Deck deck_);
-  vector<Card> GetCurrentTrick();
-  void SetUp();
-  void RunGame();
+  Trick GetCurrentTrick();
   void HandleCard(Card card);
-  bool TrickIsOngoing();
 
   bool MustPlayLikha();
   bool HasSuit(Card::Suit suit);
   static bool vecContainsCard(Card card, vector<Card> cards);
   bool HasLikhaOfSuit(Card::Suit suit_);
-  size_t GetCurrentTrickEaterIndex();
-  Card::Suit GetCurrentSuit();
   bool isValidCard(Card card);
   void HandleEndOfTrick();
 };

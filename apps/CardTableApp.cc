@@ -56,7 +56,7 @@ void CardTableApp::setup() {
 
 void CardTableApp::update() {
   const auto time = std::chrono::system_clock::now();
-  vector<Card> current_trick_ = game_engine_.GetCurrentTrick();
+  Trick trick_ = game_engine_.GetCurrentTrick();
   size_t current_player_index_ = game_engine_.GetCurrentPlayerIndex();
 
   //For beginning of the game
@@ -68,28 +68,26 @@ void CardTableApp::update() {
     return;
   }
 
-  if (current_trick_.size() == kNumPlayers && current_trick_drawers_[current_player_index_].ReachedEndPosition()
-      && game_engine_.GetCurrentSuit() != Suit::kNumSuits) { //kNumSuits is the current suit at construction of game engine,
+  if (trick_.TrickFinished() && current_trick_drawers_[current_player_index_].ReachedEndPosition()
+      ) { //kNumSuits is the current suit at construction of game engine,
     // so this runs as long as a player has played
     for (size_t i = 0; i < kNumPlayers; i++) {
       trick_discarding_drawers_[i] = CardDrawer(kCardThrowingEndPositions[i],
-                                                kOutsideOfWindowPositions[game_engine_.GetCurrentTrickEaterIndex()],
-                                                current_trick_[i], false);
+                                                kOutsideOfWindowPositions[trick_.GetTrickEater()],
+                                                trick_.GetCards()[i], false);
     }
     //empty trick drawers
     current_trick_drawers_ = vector<CardDrawer>(kNumPlayers);
     //tell game engine that trick has ended
     game_engine_.HandleEndOfTrick();
-  }
-
-  if (current_player_index_ != kHumanPlayerIndex) {
+  } else if (current_player_index_ != kHumanPlayerIndex) {
     PlayerStrategy *current_strategy_ = strategies_[current_player_index_];
     //Get card from strategy
-    Card card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick());
+    Card card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick().GetCards());
     //Keep trying while game engine says it's not a valid card to play
     while (!game_engine_.isValidCard(card_to_play_)) {
       current_strategy_->receiveMoveValidation(false);
-      card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick());
+      card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick().GetCards());
     }
     //Once the card chosen by strategy is valid, tell them
     current_strategy_->receiveMoveValidation(true);
