@@ -55,6 +55,7 @@ class CardTableApp : public cinder::app::App {
   vector<GameEngine::PlayerStats> stats_;
   string name_;
 
+  vector<Card> SortHand(vector<Card> &vector);
 };
 
 }  // namespace gui

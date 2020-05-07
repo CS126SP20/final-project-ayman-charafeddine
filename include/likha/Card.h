@@ -25,7 +25,7 @@ static constexpr size_t kTenDiamondsValue = 10;
 static constexpr size_t kQueenSpadesValue = 13;
 static constexpr size_t kNoValue = 0;
 
-static const vector<string> suits = {"diamonds", "hearts", "spades", "clubs"};
+static const vector<string> suits = {"diamonds", "spades", "hearts", "clubs"};
 static const vector<string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
 static const string
     kCardBackImagePath = "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png";
@@ -41,8 +41,8 @@ class Card {
  public:
   enum class Suit {
     Diamonds,
-    Hearts,
     Spades,
+    Hearts,
     Clubs,
     kNumSuits
   };
@@ -96,6 +96,16 @@ class Card {
    * Get the file path of the image corresponding to the card.
    */
   string GetCardImagePath() const;
+
+  /**
+   * Comparator for sorting by suit
+   */
+   static bool CompareSuits(const Card &first, const Card &second);
+
+   /**
+    * Comparator for sorting by rank
+    */
+    static bool CompareRanks(const Card &first, const Card &second);
 
  private:
   Suit suit;

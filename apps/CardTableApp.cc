@@ -155,7 +155,9 @@ void CardTableApp::BeginRound() {
   }
 
   user_hand_ = cards_dealt_[3];
-  hands_drawer_ = HandDrawer(cards_dealt_[3]);
+  std::stable_sort(user_hand_.begin(), user_hand_.end(), Card::CompareRanks);
+  std::stable_sort(user_hand_.begin(), user_hand_.end(), Card::CompareSuits);
+  hands_drawer_ = HandDrawer(user_hand_);
 }
 
 void CardTableApp::RunRound() {
@@ -202,6 +204,7 @@ void CardTableApp::RunRound() {
     game_engine_.HandleCard(card_to_play_);
   }
 }
+
 
 }  // namespace gui
 

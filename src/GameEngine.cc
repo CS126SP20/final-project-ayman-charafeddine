@@ -56,8 +56,9 @@ void GameEngine::HandleCard(Card card) {
   if (IsRoundOver()) {
     HandleEndOfTrick();
     addUpScores();
-    //Player that starts game is the one who ate the queen of spades
+    //Player that starts new round is the one who ate the queen of spades
     current_player_index_ = GetQueenOfSpadesEater();
+    //empty cards eaten for new round
     player_cards_eaten_ = vector<vector<Card>>(4, vector<Card>());
   }
 }

@@ -69,4 +69,12 @@ string Card::GetCardImagePath() const {
   return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit_string_ + "-" + rank_string_ + ".png";
 }
 
+bool Card::CompareSuits(const Card &first, const Card &second) {
+  return first.suit < second.suit;
+}
+
+bool Card::CompareRanks(const Card &first, const Card &second) {
+  return first.rank < second.rank;
+}
+
 } //namespace likha
