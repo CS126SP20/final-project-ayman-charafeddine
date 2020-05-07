@@ -30,7 +30,7 @@ CardTableApp::CardTableApp() {
   game_engine_ = GameEngine();
   current_trick_drawers_ = vector<CardDrawer>(4);
   trick_discarding_drawers_ = vector<CardDrawer>(4);
-  state_ = GameState::StartGame;
+  state_ = GameState::SetUpGame;
   stats_ = vector<GameEngine::PlayerStats>(4);
 }
 
@@ -49,41 +49,19 @@ void CardTableApp::setup() {
 
 void CardTableApp::update() {
 
-  if (state_ == GameState::StartGame) {
-    ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
-    ImGui::Text("Your team mate : Player1 \nYour opponents : Player0 and Player2 \nEnter your name: ");
-    ImGui::InputText("", &name_);
-    if (!name_.empty()) {
-      if (ImGui::Button("Start Game")) {
-        state_ = GameState::StartRound;
-      }
-    }
-    ImGui::End();
+  if (game_engine_.IsGameOver()) {
+    EndGame();
 
-  } else if (state_ == GameState::EndRound) {
-    ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
-    std::stringstream scores;
-    scores << "Team A :\nPlayer0: " << stats_[0].score_ << "\nPlayer2: "
-    << stats_[2].score_ << "\n\nTeam B :\nPlayer1: " << stats_[1].score_ << "\n" << name_ << ": " << stats_[3].score_;
-    ImGui::Text("%s", scores.str().c_str());
-    if (ImGui::Button("Start Next Round")) {
-      state_ = GameState::StartRound;
-    }
-    ImGui::End();
+  } else if (state_ == GameState::SetUpGame) {
+    StartGame();
 
-  } else if (state_ == GameState::StartRound) {
-    BeginRound();
-    state_ = GameState::Dealing;
+  } else if (game_engine_.IsRoundOver() && state_ != GameState::SetUpRound) {
+    EndRound();
 
-  } else if (game_engine_.IsRoundOver()) {
-    stats_ = game_engine_.GetPlayerStats();
-    state_ = GameState::EndRound;
+  } else if (state_ == GameState::SetUpRound) {
+    StartRound();
 
   } else if (hands_drawer_.DealingComplete()) {
-    state_ = GameState::TakingTricks;
-  }
-
-  if (state_ == GameState::TakingTricks) {
     RunRound();
   }
 
@@ -92,19 +70,14 @@ void CardTableApp::update() {
 void CardTableApp::draw() {
   cinder::gl::clear(Color(0.04f, 0.42f, 0));
 
-  if (state_ != GameState::StartGame && state_ != GameState::StartRound) {
-    hands_drawer_.UpdateAndDraw(getElapsedSeconds());
-  }
+  hands_drawer_.UpdateAndDraw(getElapsedSeconds());
 
-  if (state_ == GameState::TakingTricks) {
-    for (auto &drawer : current_trick_drawers_) {
-      drawer.UpdateAndDraw(getElapsedSeconds());
-    }
-    for (auto &drawer : trick_discarding_drawers_) {
-      drawer.UpdateAndDraw(getElapsedSeconds());
-    }
+  for (auto &drawer : current_trick_drawers_) {
+    drawer.UpdateAndDraw(getElapsedSeconds());
   }
-
+  for (auto &drawer : trick_discarding_drawers_) {
+    drawer.UpdateAndDraw(getElapsedSeconds());
+  }
 }
 
 void CardTableApp::keyDown(KeyEvent event) {}
@@ -118,8 +91,7 @@ CardTableApp::~CardTableApp() {
 void CardTableApp::mouseDown(cinder::app::MouseEvent event) {
   if (game_engine_.GetCurrentPlayerIndex() == kHumanPlayerIndex
       && event.isLeftDown()
-      && user_hand_rect_.contains(event.getPos())
-      && state_ == GameState::TakingTricks) {
+      && user_hand_rect_.contains(event.getPos())) {
     //Initialize card as an invalid one
     Card card_to_play_{Suit::kNumSuits, Rank::kNumRanks};
     size_t card_index_ = 0;
@@ -143,7 +115,7 @@ void CardTableApp::mouseDown(cinder::app::MouseEvent event) {
   }
 }
 
-void CardTableApp::BeginRound() {
+void CardTableApp::StartRound() {
   current_trick_drawers_ = vector<CardDrawer>(4);
   trick_discarding_drawers_ = vector<CardDrawer>(4);
 
@@ -155,9 +127,12 @@ void CardTableApp::BeginRound() {
   }
 
   user_hand_ = cards_dealt_[3];
+  //sort by rank
   std::stable_sort(user_hand_.begin(), user_hand_.end(), Card::CompareRanks);
+  //sort by suit
   std::stable_sort(user_hand_.begin(), user_hand_.end(), Card::CompareSuits);
   hands_drawer_ = HandDrawer(user_hand_);
+  state_ = GameState::RunGame;
 }
 
 void CardTableApp::RunRound() {
@@ -204,7 +179,46 @@ void CardTableApp::RunRound() {
     game_engine_.HandleCard(card_to_play_);
   }
 }
+void CardTableApp::StartGame() {
+  ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
+  ImGui::Text("Your team mate : Player1 \nYour opponents : Player0 and Player2 \nEnter your name: ");
+  ImGui::InputText("", &name_);
+  if (!name_.empty()) {
+    if (ImGui::Button("Start Game")) {
+      StartRound();
+    }
+  }
+  ImGui::End();
+}
+void CardTableApp::EndRound() {
+  stats_ = game_engine_.GetPlayerStats();
 
+  ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
+  std::stringstream scores;
+  scores << "Team 0 :\nPlayer0: " << stats_[0].score_ << "\nPlayer2: "
+         << stats_[2].score_ << "\n\nTeam 1 :\nPlayer1: " << stats_[1].score_ << "\n" << name_ << ": "
+         << stats_[3].score_;
+  ImGui::Text("%s", scores.str().c_str());
+  if (ImGui::Button("Start Next Round")) {
+    StartRound();
+  }
+  ImGui::End();
+}
+void CardTableApp::EndGame() {
+  cinder::gl::clear(Color(0, 0, 0));
+
+  ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
+  size_t losing_team_ = game_engine_.GetLosingTeam();
+  size_t winning_team_ = (losing_team_ + 1) % 2; //1 if losing team is 0 and 0 if losing team if 1
+
+  std::stringstream game_stats_;
+  game_stats_ << "Game Over!\nWinners: Team " << winning_team_ << "\nLosers: Team " << losing_team_;
+
+  ImGui::Text("%s", game_stats_.str().c_str());
+
+  ImGui::End();
+
+}
 
 }  // namespace gui
 

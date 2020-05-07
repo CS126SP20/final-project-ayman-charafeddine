@@ -16,7 +16,7 @@ using cinder::loadImage;
 using cinder::Color;
 
 HandDrawer::HandDrawer(vector<Card> hand_) {
-  card_drawers_ = vector<vector<CardDrawer>>(4, vector<CardDrawer>());
+  card_drawers_ = vector<vector<CardDrawer>>(kNumPlayers, vector<CardDrawer>());
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
     CardDrawer left_card_(kCenter, {kFirstCardLeftPlayer.x, kFirstCardLeftPlayer.y + kCardImageHalfWidth * i},
         true);
@@ -36,7 +36,9 @@ HandDrawer::HandDrawer(vector<Card> hand_) {
   }
 }
 
-HandDrawer::HandDrawer() = default;
+HandDrawer::HandDrawer() {
+  card_drawers_ = vector<vector<CardDrawer>>(kNumPlayers, vector<CardDrawer>(kNumCardsPerPlayer));
+}
 
 void HandDrawer::UpdateAndDraw(double new_elapsed_seconds_) {
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {

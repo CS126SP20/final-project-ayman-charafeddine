@@ -21,13 +21,9 @@ static const vector<cinder::vec2> kOutsideOfWindowPositions = {{- 200, 400}, {40
                                                                {1000, 400}, {400, 1000}};
 
 enum class GameState {
-  StartGame,
-  StartRound,
-  Dealing,
-  Gifting,
-  TakingTricks,
-  EndRound,
-  EndGame,
+  SetUpGame,
+  SetUpRound,
+  RunGame
 };
 
 class CardTableApp : public cinder::app::App {
@@ -42,7 +38,7 @@ class CardTableApp : public cinder::app::App {
   ~CardTableApp() override;
 
  private:
-  void BeginRound();
+  void StartRound();
   void RunRound();
   GameState state_;
   HandDrawer hands_drawer_;
@@ -56,6 +52,9 @@ class CardTableApp : public cinder::app::App {
   string name_;
 
   vector<Card> SortHand(vector<Card> &vector);
+  void StartGame();
+  void EndRound();
+  void EndGame();
 };
 
 }  // namespace gui

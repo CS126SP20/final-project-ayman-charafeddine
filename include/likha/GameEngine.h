@@ -16,6 +16,7 @@ using std::string;
 namespace likha {
 
 static constexpr size_t kNumPlayers = 4;
+static constexpr size_t kLosingScore = 20;
 
 class GameEngine {
  public:
@@ -52,9 +53,10 @@ class GameEngine {
   void HandleEndOfTrick();
   bool IsRoundOver();
   vector<PlayerStats> GetPlayerStats();
-  bool IsRoundStarting();
+  bool IsGameOver();
 
   size_t GetQueenOfSpadesEater();
+  size_t GetLosingTeam();
 };
 
 }

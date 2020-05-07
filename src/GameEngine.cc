@@ -172,6 +172,7 @@ bool GameEngine::IsRoundOver() {
   }
   return true;
 }
+
 vector<GameEngine::PlayerStats> GameEngine::GetPlayerStats() {
   return players_;
 }
@@ -182,6 +183,23 @@ size_t GameEngine::GetQueenOfSpadesEater() {
       if (card == Card(Suit::Spades, Rank::Queen)) {
         return player_index;
       }
+    }
+  }
+}
+
+bool GameEngine::IsGameOver() {
+  for (const auto& player_stats_ : players_) {
+    if (player_stats_.score_ >= kLosingScore) {
+      return true;
+    }
+  }
+  return false;
+}
+
+size_t GameEngine::GetLosingTeam() {
+  for (const auto& player_stats_ : players_) {
+    if (player_stats_.score_ >= kLosingScore) {
+      return player_stats_.team_;
     }
   }
 }
