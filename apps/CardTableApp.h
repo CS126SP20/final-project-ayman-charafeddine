@@ -7,6 +7,7 @@
 #include <cinder/gl/Texture.h>
 #include <likha/PlayerStartegy.h>
 #include "likha/HandDrawer.h"
+#include <likha/GameEngine.h>
 
 namespace likha {
 
@@ -20,11 +21,13 @@ static const vector<cinder::vec2> kOutsideOfWindowPositions = {{- 200, 400}, {40
                                                                {1000, 400}, {400, 1000}};
 
 enum class GameState {
-  SetUp,
+  StartGame,
+  StartRound,
   Dealing,
   Gifting,
-  TrickTaking,
-  DrawingCardPlayed
+  TakingTricks,
+  EndRound,
+  EndGame,
 };
 
 class CardTableApp : public cinder::app::App {
@@ -39,15 +42,22 @@ class CardTableApp : public cinder::app::App {
   ~CardTableApp() override;
 
  private:
+  void BeginRound();
+  void RunRound();
   GameState state_;
-  HandDrawer dealer_;
-  vector<Card> hand_;
+  HandDrawer hands_drawer_;
+  vector<Card> user_hand_;
   GameEngine game_engine_;
   vector<PlayerStrategy*> strategies_;
   vector<CardDrawer> current_trick_drawers_;
   std::chrono::time_point<std::chrono::system_clock> time_since_card_played;
   vector<CardDrawer> trick_discarding_drawers_;
+  vector<GameEngine::PlayerStats> stats_;
+  string name_;
 
+  template<typename C>
+  void PrintText(const string &text, const C &color, const glm::ivec2 &size, const vec2 &loc);
+  void DrawScores();
 };
 
 }  // namespace gui

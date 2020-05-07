@@ -22,9 +22,7 @@ void BasicPlayerStrategy::receiveInitialCards(vector<Card> cards) {
     card_index_to_try_ = 0;
 }
 vector<Card> BasicPlayerStrategy::giftCards() {
-  return vector<Card>({Card(Suit::Hearts, Rank::Six),
-                       Card(Suit::Hearts, Rank::Six),
-                       Card(Suit::Hearts, Rank::Six),});
+  return vector<Card>({Card(Suit::Hearts, Rank::Six)});
 }
 Card BasicPlayerStrategy::playCard(vector<Card> cardsPlayed) {
   return my_hand_[card_index_to_try_];
@@ -34,9 +32,11 @@ void BasicPlayerStrategy::receiveMoveValidation(bool isValid) {
     card_index_to_try_ = (card_index_to_try_ + 1) % my_hand_.size();
   }
 }
+
 void BasicPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {
 
 }
+
 void BasicPlayerStrategy::receiveGift(vector<Card> cards) {
 
 }

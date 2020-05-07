@@ -18,17 +18,18 @@ namespace likha {
 static constexpr size_t kNumPlayers = 4;
 
 class GameEngine {
- private:
-  struct Player {
+ public:
+  struct PlayerStats {
     size_t score_;
     size_t team_;
   };
 
+ private:
   void addUpScores();
 
   size_t current_player_index_;
   vector<vector<Card>> player_hands_;
-  vector<Player> players_;
+  vector<PlayerStats> players_;
   vector<vector<Card>> player_cards_eaten_;
   Trick trick_ = Trick(0);
 
@@ -41,14 +42,19 @@ class GameEngine {
   size_t GetCurrentPlayerIndex();
   vector<vector<Card>> DealCards(Deck deck_);
   Trick GetCurrentTrick();
-  void HandleCard(Card card);
 
-  bool MustPlayLikha();
-  bool HasSuit(Card::Suit suit);
-  static bool vecContainsCard(Card card, vector<Card> cards);
-  bool HasLikhaOfSuit(Card::Suit suit_);
-  bool isValidCard(Card card);
+  void HandleCard(Card card);
+  bool CurrentPlayerMustPlayLikha();
+  bool CurrentPlayerHasSuit(Card::Suit suit);
+  static bool VectorContainsCard(Card card, vector<Card> cards);
+  bool CurrentPlayerHasLikhaOfSuit(Card::Suit suit_);
+  bool IsValidCard(Card card);
   void HandleEndOfTrick();
+  bool IsRoundOver();
+  vector<PlayerStats> GetPlayerStats();
+  bool IsRoundStarting();
+
+  size_t GetQueenOfSpadesEater();
 };
 
 }
