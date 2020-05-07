@@ -55,9 +55,6 @@ class CardTableApp : public cinder::app::App {
   vector<GameEngine::PlayerStats> stats_;
   string name_;
 
-  template<typename C>
-  void PrintText(const string &text, const C &color, const glm::ivec2 &size, const vec2 &loc);
-  void DrawScores();
 };
 
 }  // namespace gui

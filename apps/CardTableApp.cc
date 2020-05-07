@@ -105,10 +105,6 @@ void CardTableApp::draw() {
     }
   }
 
-  if (state_ == GameState::EndRound) {
-    DrawScores();
-  }
-
 }
 
 void CardTableApp::keyDown(KeyEvent event) {}
@@ -204,52 +200,6 @@ void CardTableApp::RunRound() {
     //Remove card from hand
     hands_drawer_.RemoveCard(current_player_index_, 0);
     game_engine_.HandleCard(card_to_play_);
-  }
-}
-
-template<typename C>
-void CardTableApp::PrintText(const string &text, const C &color, const cinder::ivec2 &size,
-                             const cinder::vec2 &loc) {
-  cinder::gl::color(color);
-
-  auto box = cinder::TextBox()
-      .alignment(cinder::TextBox::CENTER)
-      .font(cinder::Font("Arial", 30))
-      .size(size)
-      .color(color)
-      .backgroundColor(cinder::ColorA(0, 0, 0, 0))
-      .text(text);
-
-  const auto box_size = box.getSize();
-  const cinder::vec2 locp = {loc.x - box_size.x / 2, loc.y - box_size.y / 2};
-  const auto surface = box.render();
-  const auto texture = cinder::gl::Texture::create(surface);
-  cinder::gl::draw(texture, locp);
-}
-
-void CardTableApp::DrawScores() {
-
-  const cinder::vec2 top = {getWindowCenter().x, getWindowCenter().y - 200};
-  const cinder::ivec2 size = {200, 40};
-  const Color color = Color::black();
-
-  size_t row = 0;
-  PrintText("Team A", color, size, top);
-  for (const auto &player_stats_ : stats_) {
-    if (player_stats_.team_ == 0) {
-      std::stringstream ss;
-      ss << player_stats_.score_;
-      PrintText(ss.str(), color, size, {top.x, top.y + 50 * (row++)});
-    }
-  }
-
-  PrintText("Team B", color, size, {top.x, top.y + 50 * (row++)});
-  for (const auto &player_stats_ : stats_) {
-    if (player_stats_.team_ == 1) {
-      std::stringstream ss;
-      ss << player_stats_.score_;
-      PrintText(ss.str(), color, size, {top.x, top.y + 50 * (row++)});
-    }
   }
 }
 

@@ -58,6 +58,7 @@ void GameEngine::HandleCard(Card card) {
     addUpScores();
     //Player that starts game is the one who ate the queen of spades
     current_player_index_ = GetQueenOfSpadesEater();
+    player_cards_eaten_ = vector<vector<Card>>(4, vector<Card>());
   }
 }
 
