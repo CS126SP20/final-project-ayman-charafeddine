@@ -18,8 +18,17 @@ class Deck {
   std::stack<Card> deck_of_cards_;
 
  public:
+  /**
+   * Constructs a Deck object with a stack of each of the 52 cards, and that's randomly shuffled.
+   */
   Deck();
+  /**
+   * Returns the top card and pops it from the stack.
+   */
   Card Draw();
+  /**
+   * Returns size of stack.
+   */
   size_t size() const;
 
 };

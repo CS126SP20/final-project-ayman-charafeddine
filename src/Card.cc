@@ -33,7 +33,7 @@ size_t Card::GetPointValue() const {
     return kQueenSpadesValue;
   }
 
-  return kNoValue;
+  return 0;
 }
 
 Card::Suit Card::GetSuit() const {
@@ -64,8 +64,8 @@ bool Card::EatsLikhaOfCurrentSuit(Suit required_suit_) const {
 }
 
 string Card::GetCardImagePath() const {
-  string suit_string_ = suits[(size_t) suit];
-  string rank_string_ = ranks[(size_t) rank];
+  string suit_string_ = kSuitsStrings[(size_t) suit];
+  string rank_string_ = kRanksStrings[(size_t) rank];
   return "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/" + suit_string_ + "-" + rank_string_ + ".png";
 }
 

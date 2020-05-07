@@ -80,8 +80,6 @@ void CardTableApp::draw() {
   }
 }
 
-void CardTableApp::keyDown(KeyEvent event) {}
-
 CardTableApp::~CardTableApp() {
   for (const auto &strategy : strategies_) {
     delete strategy;
@@ -123,10 +121,10 @@ void CardTableApp::StartRound() {
   vector<vector<Card>> cards_dealt_ = game_engine_.DealCards(deck);
 
   for (size_t i = 0; i < kNumPlayers - 1; i++) {
-    strategies_[i]->receiveInitialCards(cards_dealt_[i]);
+    strategies_[i]->ReceiveInitialCards(cards_dealt_[i]);
   }
 
-  user_hand_ = cards_dealt_[3];
+  user_hand_ = cards_dealt_[kHumanPlayerIndex];
   //sort by rank
   std::stable_sort(user_hand_.begin(), user_hand_.end(), Card::CompareRanks);
   //sort by suit
@@ -140,7 +138,7 @@ void CardTableApp::RunRound() {
   Trick trick_ = game_engine_.GetCurrentTrick();
   size_t current_player_index_ = game_engine_.GetCurrentPlayerIndex();
 
-  if (time < time_since_card_played + std::chrono::milliseconds(800)) {
+  if (time < time_since_card_played + std::chrono::milliseconds(800)) { //slow down the strategies playing
     return;
   }
 
@@ -160,14 +158,14 @@ void CardTableApp::RunRound() {
   } else if (current_player_index_ != kHumanPlayerIndex) {
     PlayerStrategy *current_strategy_ = strategies_[current_player_index_];
     //Get card from strategy
-    Card card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick().GetCards());
+    Card card_to_play_ = current_strategy_->PlayCard(game_engine_.GetCurrentTrick().GetCards());
     //Keep trying while game engine says it's not a valid card to play
     while (!game_engine_.IsValidCard(card_to_play_)) {
-      current_strategy_->receiveMoveValidation(false);
-      card_to_play_ = current_strategy_->playCard(game_engine_.GetCurrentTrick().GetCards());
+      current_strategy_->ReceiveMoveValidation(false);
+      card_to_play_ = current_strategy_->PlayCard(game_engine_.GetCurrentTrick().GetCards());
     }
     //Once the card chosen by strategy is valid, tell them
-    current_strategy_->receiveMoveValidation(true);
+    current_strategy_->ReceiveMoveValidation(true);
     //Draw card being thrown
     current_trick_drawers_[current_player_index_] =
         CardDrawer(kPlayerPositions[current_player_index_],
@@ -179,6 +177,7 @@ void CardTableApp::RunRound() {
     game_engine_.HandleCard(card_to_play_);
   }
 }
+
 void CardTableApp::StartGame() {
   ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
   ImGui::Text("Your team mate : Player1 \nYour opponents : Player0 and Player2 \nEnter your name: ");
@@ -190,6 +189,7 @@ void CardTableApp::StartGame() {
   }
   ImGui::End();
 }
+
 void CardTableApp::EndRound() {
   stats_ = game_engine_.GetPlayerStats();
 
@@ -204,9 +204,8 @@ void CardTableApp::EndRound() {
   }
   ImGui::End();
 }
-void CardTableApp::EndGame() {
-  cinder::gl::clear(Color(0, 0, 0));
 
+void CardTableApp::EndGame() {
   ImGui::Begin("Likha", reinterpret_cast<bool *>(false), ImGuiWindowFlags_Modal);
   size_t losing_team_ = game_engine_.GetLosingTeam();
   size_t winning_team_ = (losing_team_ + 1) % 2; //1 if losing team is 0 and 0 if losing team if 1
@@ -215,9 +214,7 @@ void CardTableApp::EndGame() {
   game_stats_ << "Game Over!\nWinners: Team " << winning_team_ << "\nLosers: Team " << losing_team_;
 
   ImGui::Text("%s", game_stats_.str().c_str());
-
   ImGui::End();
-
 }
 
 }  // namespace gui

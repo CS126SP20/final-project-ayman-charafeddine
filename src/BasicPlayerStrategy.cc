@@ -10,34 +10,33 @@ using Rank = likha::Card::Rank;
 
 namespace likha {
 
-string BasicPlayerStrategy::chooseName() const {
+string BasicPlayerStrategy::ChooseName() const {
   string name = "player" + std::to_string(std::random_device().operator()());
   return name;
 }
-void BasicPlayerStrategy::receiveNames(string teammate_name_, vector<string> opponent_names_) {
 
-}
-void BasicPlayerStrategy::receiveInitialCards(vector<Card> cards) {
+void BasicPlayerStrategy::ReceiveInitialCards(vector<Card> cards) {
     my_hand_ = cards;
     card_index_to_try_ = 0;
 }
-vector<Card> BasicPlayerStrategy::giftCards() {
-  return vector<Card>({Card(Suit::Hearts, Rank::Six)});
+vector<Card> BasicPlayerStrategy::GiftCards() {
+  return vector<Card>();
 }
-Card BasicPlayerStrategy::playCard(vector<Card> cardsPlayed) {
+Card BasicPlayerStrategy::PlayCard(vector<Card> current_trick_) {
+  //Keep randomly playing card in hand, if not valid, index is updated in ReceiveMoveValidation method
   return my_hand_[card_index_to_try_];
 }
-void BasicPlayerStrategy::receiveMoveValidation(bool isValid) {
+void BasicPlayerStrategy::ReceiveMoveValidation(bool isValid) {
   if (!isValid) {
     card_index_to_try_ = (card_index_to_try_ + 1) % my_hand_.size();
   }
 }
 
-void BasicPlayerStrategy::receiveCurrentScores(map<string, size_t> currentScores) {
+void BasicPlayerStrategy::receiveCurrentScores(map<size_t, size_t> current_scores_) {
 
 }
 
-void BasicPlayerStrategy::receiveGift(vector<Card> cards) {
+void BasicPlayerStrategy::ReceiveGift(vector<Card> cards) {
 
 }
 

@@ -43,7 +43,7 @@ class CardDrawer {
   bool ReachedEndPosition();
 
   /**
-   * Whether the drawer draws anything
+   * Whether the drawer draws anything.
    */
    bool Draws();
 

@@ -15,7 +15,7 @@ namespace gui {
 using cinder::loadImage;
 using cinder::Color;
 
-HandDrawer::HandDrawer(vector<Card> hand_) {
+HandDrawer::HandDrawer(vector<Card> user_hand_) {
   card_drawers_ = vector<vector<CardDrawer>>(kNumPlayers, vector<CardDrawer>());
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
     CardDrawer left_card_(kCenter, {kFirstCardLeftPlayer.x, kFirstCardLeftPlayer.y + kCardImageHalfWidth * i},
@@ -31,7 +31,7 @@ HandDrawer::HandDrawer(vector<Card> hand_) {
   for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
     CardDrawer user_card_
         (kCenter, {kFirstCardBottomPlayer.x - kCardImageHalfWidth * i, kFirstCardBottomPlayer.y},
-            hand_[i], true);
+            user_hand_[i], true);
     card_drawers_[3].push_back(user_card_);
   }
 }

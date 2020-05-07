@@ -33,28 +33,49 @@ class CardTableApp : public cinder::app::App {
   void setup() override;
   void update() override;
   void draw() override;
-  void keyDown(cinder::app::KeyEvent) override;
   void mouseDown(cinder::app::MouseEvent event) override;
   ~CardTableApp() override;
 
  private:
-  void StartRound();
-  void RunRound();
+
   GameState state_;
   HandDrawer hands_drawer_;
+
+  /**Cards in user's posetion. Does not delete when player plays a card*/
   vector<Card> user_hand_;
+
   GameEngine game_engine_;
   vector<PlayerStrategy*> strategies_;
+
+  /** CardDrawers for the current trick*/
   vector<CardDrawer> current_trick_drawers_;
+
   std::chrono::time_point<std::chrono::system_clock> time_since_card_played;
+
+  /** Card Drawers for the current trick being discarded at the end of a trick.*/
   vector<CardDrawer> trick_discarding_drawers_;
+
   vector<GameEngine::PlayerStats> stats_;
   string name_;
 
-  vector<Card> SortHand(vector<Card> &vector);
+  /**
+   * Set up a new Game.
+   */
   void StartGame();
+  /**
+   * Draw the scores at the end of a round.
+   */
   void EndRound();
+  /** Give winning team at the end of a game*/
   void EndGame();
+  /**
+  * Set up the new round.
+  */
+  void StartRound();
+  /**
+   * Let strategies play their cards.
+   */
+  void RunRound();
 };
 
 }  // namespace gui

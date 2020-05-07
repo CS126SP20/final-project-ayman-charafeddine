@@ -22,12 +22,34 @@ static const vector<cinder::vec2> kPlayerPositions = {kFirstCardLeftPlayer, kFir
 
 class HandDrawer {
  public:
-  HandDrawer(vector<Card> hand_);
+  /**
+   * Constructor based on user hand.
+   * @param hand_
+   */
+  HandDrawer(vector<Card> user_hand_);
+  /**
+   * Default constructor, doesn't draw anything when UpdateAndDraw is called.
+   */
   HandDrawer();
+  /**
+   * Update positions and draw the hands in new positions.
+   * @param new_elapsed_seconds_ seconds elapsed to be used for rotating
+   */
   void UpdateAndDraw(double new_elapsed_seconds_);
+  /**
+   * Remove a card from hand. Removes the specific card if from human hand,
+   * and the next card if from face-down computer hands.
+   * @param player_index_
+   * @param card_index_
+   */
   void RemoveCard(size_t player_index_, size_t card_index_);
+  /**
+   * Return whether all cards are in their positions in the hand or whether theyr are still being dealt.
+   */
   bool DealingComplete();
+
  private:
+  /** Card drawer for each card in hands. */
   vector<vector<CardDrawer>> card_drawers_;
 
 };

@@ -21,7 +21,7 @@ GameEngine::GameEngine() {
         0,
         i % 2 // Player 0 and 2 in team 0, Player 1 and 3 (gui) in team 1.
     };
-    players_.push_back(player);
+    players_stats_.push_back(player);
   }
   current_player_index_ = 0;
   player_cards_eaten_ = vector<vector<Card>>(4, vector<Card>());
@@ -30,7 +30,7 @@ GameEngine::GameEngine() {
 
 vector<vector<Card>> GameEngine::DealCards(Deck deck_) {
   player_hands_.clear();
-  for (const auto& player_ : players_) {
+  for (const auto& player_ : players_stats_) {
     vector<Card> cards_to_deal_;
     for (size_t i = 0; i < kNumCardsPerPlayer; i++) {
       cards_to_deal_.push_back(deck_.Draw());
@@ -55,7 +55,7 @@ void GameEngine::HandleCard(Card card) {
 
   if (IsRoundOver()) {
     HandleEndOfTrick();
-    addUpScores();
+    AddUpScores();
     //Player that starts new round is the one who ate the queen of spades
     current_player_index_ = GetQueenOfSpadesEater();
     //empty cards eaten for new round
@@ -88,13 +88,13 @@ bool GameEngine::IsValidCard(Card card) {
   return true;
 }
 
-void GameEngine::addUpScores() {
+void GameEngine::AddUpScores() {
   for (size_t player_index = 0; player_index < kNumPlayers; player_index++) {
     size_t current_player_score_ = 0;
     for (const auto &card : player_cards_eaten_[player_index]) {
       current_player_score_ += card.GetPointValue();
     }
-    players_[player_index].score_ += current_player_score_;
+    players_stats_[player_index].score_ += current_player_score_;
   }
 }
 
@@ -134,8 +134,8 @@ bool GameEngine::CurrentPlayerHasSuit(Suit suit) {
   return false;
 }
 
-bool GameEngine::VectorContainsCard(Card card, vector<Card> cards) {
-  return (std::find(cards.begin(), cards.end(), card) != cards.end());
+bool GameEngine::VectorContainsCard(Card card_to_find_, vector<Card> cards) {
+  return (std::find(cards.begin(), cards.end(), card_to_find_) != cards.end());
 }
 
 bool GameEngine::CurrentPlayerHasLikhaOfSuit(Suit suit_) {
@@ -174,7 +174,7 @@ bool GameEngine::IsRoundOver() {
 }
 
 vector<GameEngine::PlayerStats> GameEngine::GetPlayerStats() {
-  return players_;
+  return players_stats_;
 }
 
 size_t GameEngine::GetQueenOfSpadesEater() {
@@ -188,7 +188,7 @@ size_t GameEngine::GetQueenOfSpadesEater() {
 }
 
 bool GameEngine::IsGameOver() {
-  for (const auto& player_stats_ : players_) {
+  for (const auto& player_stats_ : players_stats_) {
     if (player_stats_.score_ >= kLosingScore) {
       return true;
     }
@@ -197,7 +197,7 @@ bool GameEngine::IsGameOver() {
 }
 
 size_t GameEngine::GetLosingTeam() {
-  for (const auto& player_stats_ : players_) {
+  for (const auto& player_stats_ : players_stats_) {
     if (player_stats_.score_ >= kLosingScore) {
       return player_stats_.team_;
     }

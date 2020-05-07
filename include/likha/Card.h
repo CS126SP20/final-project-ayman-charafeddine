@@ -23,10 +23,9 @@ using cinder::Color;
 static constexpr size_t kHeartsValue = 1;
 static constexpr size_t kTenDiamondsValue = 10;
 static constexpr size_t kQueenSpadesValue = 13;
-static constexpr size_t kNoValue = 0;
 
-static const vector<string> suits = {"diamonds", "spades", "hearts", "clubs"};
-static const vector<string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
+static const vector<string> kSuitsStrings = {"diamonds", "spades", "hearts", "clubs"};
+static const vector<string> kRanksStrings = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"};
 static const string
     kCardBackImagePath = "/home/ayman/Cinder/my-projects/final-project-ayman-charafeddine/assets/cards/back-red-1.png";
 
